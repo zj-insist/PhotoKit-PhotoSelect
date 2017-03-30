@@ -33,6 +33,7 @@
     [self setupIndexLabel];
     [self setupHeadView];
     [self setupHeaderViewRightBtnWithIndex:self.currentIndex];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -61,6 +62,17 @@
     self.headView = headView;
 }
 
+-(void)setupBottomView {
+    QSPhotosBottomView *bottomView = [[QSPhotosBottomView alloc]
+                                      initWithFrame:CGRectMake(0, CGRectGetMaxY(self.collection.frame) - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT) bottomViewStyle:QSBottomViewStyleBrowser];
+    bottomView.delegate = self;
+    bottomView.selectCount = self.selectAssets.count;
+    [self.view addSubview:bottomView];
+    [self.view bringSubviewToFront:bottomView];
+    self.bottom = bottomView;
+    //    [bottomView setHidden:YES];
+}
+
 - (void)setupViewController {
     [self.view setBackgroundColor:[UIColor blackColor]];
     [self.navigationController setNavigationBarHidden:YES];
@@ -68,16 +80,6 @@
 
 -(BOOL)prefersStatusBarHidden {
     return YES;
-}
-
--(void)setupBottomView {
-    QSPhotosBottomView *bottomView = [[QSPhotosBottomView alloc]
-                                      initWithFrame:CGRectMake(0, CGRectGetMaxY(self.collection.frame) - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT) bottomViewStyle:QSBottomViewStyleBrowser];
-    bottomView.delegate = self;
-    [self.view addSubview:bottomView];
-    [self.view bringSubviewToFront:bottomView];
-    self.bottom = bottomView;
-//    [bottomView setHidden:YES];
 }
 
 #pragma mark - CollectionDelegate
@@ -136,6 +138,7 @@
     } else {
         [self.selectAssets addObject:asset];
     }
+    self.bottom.selectCount = self.selectAssets.count;
     return YES;
 }
 

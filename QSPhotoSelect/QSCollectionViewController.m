@@ -146,6 +146,7 @@
             vc.needRightBtn = strongSelf.needRightBtn;
             vc.recordCallBack = ^(NSMutableArray *selectAsset) {
                 strongSelf.selectAssets = selectAsset;
+                strongSelf.bottom.selectCount = selectAsset.count;
             };
             [strongSelf.navigationController pushViewController:vc animated:YES];
         };
@@ -181,6 +182,7 @@
     }
     return _selectAssets;
 }
+
 
 
 #pragma mark - delete
