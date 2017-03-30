@@ -10,10 +10,17 @@
 
 @protocol QSBrowserHeadViewDelegate <NSObject>
 
-
+-(void)QS_headerViewLeftBtnTouched;
+-(BOOL)QS_headerViewRightBtnTouched:(BOOL)isSelected;
 
 @end
 
 @interface QSBrowserHeadView : UIView
+
+@property(nonatomic, weak) id<QSBrowserHeadViewDelegate> delegate;
+
+@property(nonatomic, assign) BOOL isSelected;
+
+@property(nonatomic, assign) BOOL needCheckedBtn;
 
 @end

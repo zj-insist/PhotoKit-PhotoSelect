@@ -18,13 +18,13 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
 @interface QSPhotosBottomView()
 
 {
-    TouchBottomViewButton _leftButtonCallBack;
-    TouchBottomViewButton _rightButtonCallBack;
-    BOOL _isSelected;
+    QSBottomViewStyle _style;
 }
 
 @property(nonatomic, strong) UIButton *leftBtn;
 @property(nonatomic, strong) UIButton *rightBtn;
+@property(nonatomic, assign) BOOL isSelectOrginal;
+@property(nonatomic, strong) NSString *dataLength;
 
 @end
 
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
     self = [super initWithFrame:frame];
     if (self) {
         [self setupRightBtn];
-        
+        _style = style;
         if (style == QSBottomViewStyleSelect) {
             [self setupLeftBtnWithStyle:QSPHOTOBUTTONSTYLEBROWSER];
         } else {
@@ -88,6 +88,7 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
     return btn;
 }
 
+
 -(void)setSelectCount:(NSUInteger)selectCount {
     _selectCount = selectCount;
     if (_selectCount > 0) {
@@ -99,9 +100,25 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
     }
 }
 
+-(void)setIsSelectOrginal:(BOOL)isSelectOrginal {
+    _isSelectOrginal = isSelectOrginal;
+    if (!self.dataLength) {
+        [self.leftBtn setTitle:@"原图" forState:UIControlStateNormal];
+    } else {
+        [self.leftBtn setTitle:[NSString stringWithFormat:@"原图(%@)",self.dataLength] forState:UIControlStateNormal];
+    }
+}
+
 -(void)leftBtnTouched {
-    if ([self.delegate respondsToSelector:@selector(QS_bottomViewLeftBtnTouched:)]) {
-        [self.delegate QS_bottomViewLeftBtnTouched:_isSelected];
+    if (_style == QSBottomViewStyleSelect) {
+        if ([self.delegate respondsToSelector:@selector(QS_bottomViewLeftBtnTouched)]) {
+            [self.delegate QS_bottomViewLeftBtnTouched];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(QS_bottomViewOrginalBtnTouched)]) {
+            self.isSelectOrginal = !self.isSelectOrginal;
+            self.dataLength = self.isSelectOrginal ? [self.delegate QS_bottomViewOrginalBtnTouched] : nil;
+        }
     }
 }
 

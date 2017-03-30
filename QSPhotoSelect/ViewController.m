@@ -53,7 +53,8 @@
     QSPhotoSelectViewController *vc = [[QSPhotoSelectViewController alloc] init];
     
     //设置VC属性
-    vc.maxCount = 9;
+    vc.maxCount = 3;
+    vc.needRightBtn = YES;
     
     [self presentViewController:vc animated:YES completion:nil];
 }

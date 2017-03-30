@@ -15,6 +15,8 @@ typedef void (^RecordSelectCallBack)(NSMutableArray <QSPhotoAsset *> *selectAsse
 
 @property(nonatomic, assign) NSUInteger maxCount;
 
+@property(nonatomic, assign) BOOL needRightBtn;
+
 @property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *selectAssets;
 
 - (instancetype)initWithQSPhotoGroup:(QSPhotoGroup *)group recordSeelecte:(RecordSelectCallBack)callBack;

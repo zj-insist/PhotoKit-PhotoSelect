@@ -44,12 +44,29 @@
     return _rightButton;
 }
 
+-(void)setIsSelected:(BOOL)isSelected {
+    _isSelected = isSelected;
+    NSString *imageName = isSelected ? @"checkbox_pic" : @"checkbox_pic_non";
+    [self.rightButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+}
+
 -(void)backButtonTouched {
-    
+    if ([self.delegate respondsToSelector:@selector(QS_headerViewLeftBtnTouched)]) {
+        [self.delegate QS_headerViewLeftBtnTouched];
+    }
 }
 
 -(void)rightButtonTouch {
-    
+    if ([self.delegate respondsToSelector:@selector(QS_headerViewRightBtnTouched:)]) {
+        if ([self.delegate QS_headerViewRightBtnTouched:self.isSelected]) {
+            self.isSelected = !self.isSelected;
+        }
+    }
+}
+
+-(void)setNeedCheckedBtn:(BOOL)needCheckedBtn {
+    _needCheckedBtn = needCheckedBtn;
+    [self.rightButton setHidden:!needCheckedBtn];
 }
 
 @end

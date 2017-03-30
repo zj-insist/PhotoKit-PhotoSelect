@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-typedef  void (^ResultImage)(UIImage *image);
+typedef void (^ResultImage)(UIImage *image);
+
+typedef void (^ResultData)(NSData *data);
 
 @class PHAsset;
 
 @interface QSPhotoAsset : NSObject
 
 @property(nonatomic, assign) BOOL isOrginal;
+
+@property(nonatomic, assign, readonly) NSUInteger orginalLength;
 
 - (instancetype)initWithAsset:(PHAsset *)asset;
 
@@ -25,5 +29,9 @@ typedef  void (^ResultImage)(UIImage *image);
 -(void)getFitThumbnailWithSize:(CGSize)size callback:(ResultImage)resultBlock;
 
 -(void)getOriginalWithCallback:(ResultImage)resultBlock;
+
+- (void)getImageDataWithCallBack:(ResultData)resultBlock;
+
+- (NSString *)getOrginalLengthWithUtil;
 
 @end

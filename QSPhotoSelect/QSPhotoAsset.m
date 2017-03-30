@@ -24,6 +24,9 @@
     if (self) {
         _asset = asset;
         _imageManager = [PHImageManager defaultManager];
+        [self getImageDataWithCallBack:^(NSData *data) {
+            _orginalLength = data.length;
+        }];
     }
     return self;
 }
@@ -49,5 +52,23 @@
         resultBlock(result);
     }];
 }
+
+- (void)getImageDataWithCallBack:(ResultData)resultBlock {
+    [_imageManager requestImageDataForAsset:_asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        resultBlock(imageData);
+    }];
+}
+
+- (NSString *)getOrginalLengthWithUtil {
+    CGFloat lenth = (CGFloat)self.orginalLength;
+    if (lenth >= 1024*1024*1024) {
+        return [NSString stringWithFormat:@"%.2fG",lenth/(1024*1024*1024)];
+    }else if (lenth >= 1024*1024) {
+        return [NSString stringWithFormat:@"%.2fM",lenth/(1024*1024)];
+    }else{
+        return [NSString stringWithFormat:@"%.2fK",lenth/1024];
+    }
+}
+
 
 @end

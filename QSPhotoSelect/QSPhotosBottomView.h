@@ -15,8 +15,10 @@ typedef NS_ENUM(NSUInteger, QSBottomViewStyle) {
 
 @protocol QSBottomViewDelegate <NSObject>
 
--(void)QS_bottomViewLeftBtnTouched:(BOOL)isSelected;
+@optional
+-(void)QS_bottomViewLeftBtnTouched;
 -(void)QS_bottomViewRightBtnTouched;
+-(NSString *)QS_bottomViewOrginalBtnTouched;
 
 @end
 

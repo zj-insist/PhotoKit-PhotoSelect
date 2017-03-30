@@ -51,6 +51,11 @@
     [Utils addNavBarCancelButtonWithController:self];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.collection reloadData];
+}
+
 - (void)setBackButtonWithImage {
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"LeftButton_back_Icon"]
@@ -101,7 +106,7 @@
 
 #pragma mark - custom delegate
 
--(void)QS_bottomViewLeftBtnTouched:(BOOL)isSelected {
+-(void)QS_bottomViewLeftBtnTouched {
     NSLog(@"预览选中的%ld张图片",self.selectAssets.count);
 }
 
@@ -126,21 +131,30 @@
         [self.view addSubview:collection];
         _collection = collection;
         _collection.selectImage = self.selectAssets;
+        _collection.needRightBtn = self.needRightBtn;
         
         __weak __typeof(self)weakSelf = self;
         __weak __typeof(_collection)weakCollect = _collection;
         
         _collection.touchitem = ^(NSInteger index) {
+            __strong __typeof(weakSelf)strongSelf = weakSelf;
             QSBrowserViewController *vc = [[QSBrowserViewController alloc] init];
-            vc.assets = weakSelf.photos;
+            vc.assets = strongSelf.photos;
             vc.currentIndex = index;
-            [weakSelf.navigationController pushViewController:vc animated:YES];
-//            [weakSelf presentViewController:vc animated:YES completion:nil];
+            vc.selectAssets = strongSelf.selectAssets;
+            vc.maxCount = strongSelf.maxCount;
+            vc.needRightBtn = strongSelf.needRightBtn;
+            vc.recordCallBack = ^(NSMutableArray *selectAsset) {
+                strongSelf.selectAssets = selectAsset;
+            };
+            [strongSelf.navigationController pushViewController:vc animated:YES];
         };
         
         _collection.selectCallBack = ^(QSPhotoAsset *asset,BOOL isSelected) {
             __strong __typeof(weakSelf)strongSelf = weakSelf;
             if (strongSelf.selectAssets.count == strongSelf.maxCount && isSelected) {
+                NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",strongSelf.selectAssets.count];
+                [Utils showAlertViewWithController:strongSelf title:@"提示" message:message confirmButton:nil];
                 return NO;
             } else if (!isSelected) {
                 for (QSPhotoAsset *result in strongSelf.selectAssets) {

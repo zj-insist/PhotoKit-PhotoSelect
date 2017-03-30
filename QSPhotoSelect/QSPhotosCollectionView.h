@@ -20,6 +20,8 @@ typedef void (^TouchItemCallBack)(NSInteger index);
 
 @property(nonatomic, assign) NSUInteger maxCount;
 
+@property(nonatomic, assign) BOOL needRightBtn;
+
 @property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *selectImage;
 
 @property(nonatomic, copy) SelectCallBack selectCallBack;

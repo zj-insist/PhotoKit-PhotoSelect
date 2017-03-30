@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^ConfirmHandle)();
+
 @protocol QSCancelBarTouchEvent <NSObject>
 
 @required
@@ -19,5 +21,7 @@
 @interface Utils : NSObject
 
 + (void)addNavBarCancelButtonWithController:(UIViewController *)controller;
+
++ (void)showAlertViewWithController:(UIViewController *)controller title:(NSString *)title message:(NSString *)message confirmButton:(ConfirmHandle)handle;
 
 @end

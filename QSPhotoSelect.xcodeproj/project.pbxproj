@@ -62,7 +62,7 @@
 		18711D1A1E84C52B00CB3CB7 /* QSPhotoAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSPhotoAsset.h; sourceTree = "<group>"; };
 		18711D1B1E84C52B00CB3CB7 /* QSPhotoAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSPhotoAsset.m; sourceTree = "<group>"; };
 		187705361E8A024100E93DE6 /* QSBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSBrowserViewController.h; sourceTree = "<group>"; };
-		187705371E8A024100E93DE6 /* QSBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSBrowserViewController.m; sourceTree = "<group>"; };
+		187705371E8A024100E93DE6 /* QSBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSBrowserViewController.m; sourceTree = "<group>"; tabWidth = 5; };
 		187705411E8A163B00E93DE6 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		187705421E8A163B00E93DE6 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		187705451E8A388000E93DE6 /* MacroDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacroDefinition.h; sourceTree = "<group>"; };

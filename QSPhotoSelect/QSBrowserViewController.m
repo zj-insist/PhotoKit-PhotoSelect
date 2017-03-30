@@ -12,12 +12,15 @@
 #import "Constants.h"
 #import "QSPhotosBottomView.h"
 #import "QSBrowserHeadView.h"
+#import "Utils.h"
 
-@interface QSBrowserViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,QSBottomViewDelegate>
+@interface QSBrowserViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,QSBottomViewDelegate,QSBrowserHeadViewDelegate>
 
 @property(nonatomic, strong) UICollectionView *collection;
 @property(nonatomic, strong) QSPhotosBottomView *bottom;
-@property(nonatomic, strong) QSBrowserHeadView *head;
+@property(nonatomic, strong) QSBrowserHeadView *headView;
+@property(nonatomic, strong) UILabel *indexLabel;
+
 @end
 
 @implementation QSBrowserViewController
@@ -27,14 +30,35 @@
     // Do any additional setup after loading the view.
     [self setupViewController];
     [self setupBottomView];
+    [self setupIndexLabel];
     [self setupHeadView];
+    [self setupHeaderViewRightBtnWithIndex:self.currentIndex];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO];
+    self.recordCallBack(self.selectAssets);
+}
+
+- (void)setupIndexLabel {
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.height - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT)];
+    [label setFont:[UIFont systemFontOfSize:15]];
+    [label setTextColor:[UIColor whiteColor]];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setText:[NSString stringWithFormat:@"%ld/%ld",self.currentIndex,self.assets.count]];
+    [self.view addSubview:label];
+    self.indexLabel = label;
+    [label setHidden:YES];
 }
 
 - (void)setupHeadView {
     QSBrowserHeadView *headView = [[QSBrowserHeadView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, HEADBAR_HEIGHT)];
+    headView.delegate = self;
+    headView.needCheckedBtn = self.needRightBtn;
     [self.view addSubview:headView];
     [self.view bringSubviewToFront:headView];
-    self.head = headView;
+    self.headView = headView;
 }
 
 - (void)setupViewController {
@@ -42,12 +66,9 @@
     [self.navigationController setNavigationBarHidden:YES];
 }
 
-
--(BOOL)prefersStatusBarHidden
-{
+-(BOOL)prefersStatusBarHidden {
     return YES;
 }
-
 
 -(void)setupBottomView {
     QSPhotosBottomView *bottomView = [[QSPhotosBottomView alloc]
@@ -56,6 +77,7 @@
     [self.view addSubview:bottomView];
     [self.view bringSubviewToFront:bottomView];
     self.bottom = bottomView;
+//    [bottomView setHidden:YES];
 }
 
 #pragma mark - CollectionDelegate
@@ -81,6 +103,44 @@
 //添加一个与间隔等宽的断尾，避免最后一张图片显示偏离位置
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     return CGSizeMake(20, self.view.frame.size.height);
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    self.currentIndex = (NSInteger)((scrollView.contentOffset.x / scrollView.frame.size.width) + 0.5);
+    NSLog(@"%ld",self.currentIndex);
+}
+
+#pragma mark - custom delegate
+
+-(NSString *)QS_bottomViewOrginalBtnTouched {
+    return [self.assets[self.currentIndex] getOrginalLengthWithUtil];
+}
+
+-(void)QS_bottomViewRightBtnTouched {
+    
+}
+
+-(BOOL)QS_headerViewRightBtnTouched:(BOOL)isSelected {
+    QSPhotoAsset *asset = self.assets[self.currentIndex];
+    if(self.selectAssets.count == self.maxCount && !isSelected){
+        NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",self.selectAssets.count];
+        [Utils showAlertViewWithController:self title:@"提示" message:message confirmButton:nil];
+        return NO;
+    } else if (isSelected)  {
+        for (QSPhotoAsset *result in self.selectAssets) {
+            if ([[result getAssetLocalIdentifier] isEqualToString:[asset getAssetLocalIdentifier]]) {
+                [self.selectAssets removeObject:result];
+                break;
+            }
+        }
+    } else {
+        [self.selectAssets addObject:asset];
+    }
+    return YES;
+}
+
+-(void)QS_headerViewLeftBtnTouched {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - setter and getter 
@@ -111,6 +171,25 @@
         _collection = collectionView;
     }
     return _collection;
+}
+
+
+-(void)setCurrentIndex:(NSUInteger)currentIndex {
+    _currentIndex = currentIndex;
+    [self setupHeaderViewRightBtnWithIndex:currentIndex];
+    [self.indexLabel setText:[NSString stringWithFormat:@"%ld/%ld",currentIndex,self.assets.count]];
+}
+
+- (void)setupHeaderViewRightBtnWithIndex:(NSUInteger)index {
+    self.headView.isSelected = NO;
+    __weak __typeof(self)weakSelf = self;
+    [self.selectAssets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        if ([[strongSelf.assets[index] getAssetLocalIdentifier] isEqualToString:[obj getAssetLocalIdentifier]]) {
+            strongSelf.headView.isSelected = YES;
+            *stop = YES;
+        }
+    }];
 }
 
 @end

@@ -97,6 +97,7 @@
     }
     vc.selectAssets = self.selectPhotos;
     vc.maxCount = self.maxCount;
+    vc.needRightBtn = self.needRightBtn;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
