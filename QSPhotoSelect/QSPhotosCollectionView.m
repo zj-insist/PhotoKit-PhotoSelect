@@ -11,6 +11,7 @@
 #import <Photos/Photos.h>
 #import "QSPhotosFooterView.h"
 #import "QSPhotosBottomView.h"
+#import "MacroDefinition.h"
 
 
 static NSString *CellIdentifier = @"Cell";
@@ -18,8 +19,6 @@ static NSString *FooterIdentifier = @"Footer";
 
 
 @interface QSPhotosCollectionView()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,QSPhotoSelectImageViewDelegate>
-
-//@property(nonatomic, strong) PHCachingImageManager *imageManager;
 
 @end
 
@@ -66,17 +65,12 @@ static NSString *FooterIdentifier = @"Footer";
     im.isSelected = NO;
     im.needCheckedBtn = self.needRightBtn;
     
-    [self.selectImage enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [QSPhotoManage.selectAssets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([[obj getAssetLocalIdentifier] isEqualToString:[im.asset getAssetLocalIdentifier]]) {
             im.isSelected = YES;
             *stop = YES;
         }
     }];
-//    im.isSelected = [self.selectImage indexOfObject:im.asset] == NSNotFound ? NO : YES;
-    
-//    [self.imageManager requestImageForAsset:self.photoAssets[indexPath.row] targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-//        im.photo = result;
-//    }];
     return cell;
 }
 
@@ -100,16 +94,6 @@ static NSString *FooterIdentifier = @"Footer";
 #pragma mark - cusotm Delegate
 
 -(BOOL)QS_selectedImageWithIndex:(QSPhotoAsset *)asset isSelect:(BOOL)select {
-    
-//    if (self.selectImage.count == self.maxCount && select) {
-//        return NO;
-//    } else if (!select) {
-//        [self.selectImage removeObject:asset];
-//    } else {
-//        [self.selectImage addObject:asset];
-//    }
-//    NSLog(@"%@",self.selectImage);
-//    return YES;
     if (self.selectCallBack) {
         return self.selectCallBack(asset,select);
     } else {
@@ -117,25 +101,5 @@ static NSString *FooterIdentifier = @"Footer";
     }
     
 }
-
-#pragma mark - setter and getter
-
-
-
--(NSMutableArray<QSPhotoAsset *> *)selectImage {
-    if (_selectImage == nil) {
-        _selectImage = [NSMutableArray array];
-    }
-    return _selectImage;
-}
-
-#pragma mark - delete
-
-//-(PHCachingImageManager *)imageManager {
-//    if (_imageManager == nil) {
-//        _imageManager = [[PHCachingImageManager alloc] init];
-//    }
-//    return _imageManager;
-//}
 
 @end

@@ -25,18 +25,6 @@
     [asset getFillThumbnailWithSize:CGSizeMake(200, 200) callback:^(UIImage *image) {
         [self.photo setImage:image];
     }];
-    
-    [self addNotification];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    NSLog(@"%s",__func__);
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    NSLog(@"%s",__func__);
 }
 
 - (IBAction)selectPhotos:(UIButton *)sender {
@@ -63,7 +51,9 @@
 }
 
 - (IBAction)presentToPhotoSelectVC:(id)sender {
-    QSPhotoSelectViewController *vc = [[QSPhotoSelectViewController alloc] init];
+    QSPhotoSelectViewController *vc = [[QSPhotoSelectViewController alloc] initWithAssetsCallBack:^(NSArray<PHAsset *> *asset, BOOL isOrginal) {
+        NSLog(@"%@------%d",asset,isOrginal);
+    }];
     
     //设置VC属性
     vc.maxCount = 3;
@@ -72,19 +62,5 @@
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)addNotification {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(completeSelect:) name:@"completeSelect" object:nil];
-}
-
-- (void)completeSelect:(NSNotification *)notif {
-    NSLog(@"%@",notif.object);
-    NSArray *arr = notif.object;
-    NSString *message = [NSString stringWithFormat:@"选择了%ld张照片",arr.count];
-        [Utils showAlertViewWithController:self title:@"选择完成" message:message confirmButton:nil];
-}
-
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"completeSelect" object:nil];
-}
 
 @end

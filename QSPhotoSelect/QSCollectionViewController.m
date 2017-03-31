@@ -20,10 +20,9 @@
 
 @interface QSCollectionViewController ()<QSCancelBarTouchEvent,QSBottomViewDelegate>
 {
-    RecordSelectCallBack _record;
     QSPhotoGroup *_group;
 }
-@property(nonatomic, strong) QSPhotosBottomView *bottom;
+@property(nonatomic, strong) QSPhotosBottomView *bottomView;
 @property(nonatomic, strong) QSPhotosCollectionView *collection;
 @property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *photos;
 @end
@@ -32,29 +31,28 @@
 
 #pragma mark - life cycle
 
-- (instancetype)initWithQSPhotoGroup:(QSPhotoGroup *)group recordSeelecte:(RecordSelectCallBack)callBack{
+- (instancetype)initWithQSPhotoGroup:(QSPhotoGroup *)group{
     self = [super init];
     if (self) {
         _group = group;
-        _record = callBack;
     }
     return self;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     [self setupSelectView];
-    [self setupBottomView];
-    [self setBackButtonWithImage];
-    [Utils addNavBarCancelButtonWithController:self];
+    self.bottomView.selectCount = QSPhotoManage.selectAssets.count;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.collection reloadData];
 }
+
+#pragma mark - private methods
 
 - (void)setBackButtonWithImage {
     
@@ -63,27 +61,13 @@
     self.navigationItem.leftBarButtonItem = backButton;
 }
 
--(void)setupBottomView {
-    QSPhotosBottomView *bottomView = [[QSPhotosBottomView alloc]
-                                      initWithFrame:CGRectMake(0, CGRectGetMaxY(self.collection.frame), self.view.frame.size.width, TOOLBAR_HEIGHT) bottomViewStyle:QSBottomViewStyleSelect];
-    bottomView.delegate = self;
-    [self.view addSubview:bottomView];
-    self.bottom = bottomView;
-}
-
-
 -(void)setupSelectView {
     self.title = _group.albumName;
     self.photos = [_group.photoAssets copy];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-}
-
-
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    if (_record) {
-        _record(self.selectAssets);
-    }
+    
+    [self setBackButtonWithImage];
+    [Utils addNavBarCancelButtonWithController:self];
 }
 
 #pragma mark - touch even
@@ -107,27 +91,25 @@
 #pragma mark - custom delegate
 
 -(void)QS_bottomViewLeftBtnTouched {
-    NSLog(@"预览选中的%ld张图片",self.selectAssets.count);
-    QSBrowserViewController *vc = [[QSBrowserViewController alloc] init];
-    vc.assets = [self.selectAssets mutableCopy];
-    vc.currentIndex = 0;
-    vc.selectAssets = self.selectAssets;
+    
+    __weak __typeof(self)weakSelf = self;
+    QSBrowserViewController *vc = [[QSBrowserViewController alloc] initWithCurrentIndex:0 recordSelectCount:^{
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        strongSelf.bottomView.selectCount = QSPhotoManage.selectAssets.count;
+    }];
+    
+    vc.assets = [QSPhotoManage.selectAssets mutableCopy];
     vc.maxCount = self.maxCount;
     vc.needRightBtn = self.needRightBtn;
-    __weak __typeof(self)weakSelf = self;
-    vc.recordCallBack = ^(NSMutableArray *selectAsset) {
-        __strong __typeof(weakSelf)strongSelf = weakSelf;
-        strongSelf.selectAssets = selectAsset;
-        strongSelf.bottom.selectCount = selectAsset.count;
-    };
+    
     [self.navigationController pushViewController:vc animated:YES];
-
 }
 
 -(void)QS_bottomViewRightBtnTouched {
-    NSLog(@"完成选择，一共%ld张图片",self.selectAssets.count);
     [self dismissViewControllerAnimated:YES completion:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"completeSelect" object:self.selectAssets];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"completeSelect"
+                                                        object:@{@"selectAssets" : QSPhotoManage.selectAssets,
+                                                                 @"isOrginal" : @(QSPhotoManage.isOrginal)}];
 }
 
 #pragma mark - setter and getter
@@ -142,78 +124,61 @@
         layout.footerReferenceSize = CGSizeMake(self.view.frame.size.width, TOOLBAR_HEIGHT * 2);
         CGRect frame = self.view.frame;
         frame.size.height = frame.size.height - TOOLBAR_HEIGHT;
+        
         QSPhotosCollectionView *collection = [[QSPhotosCollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
         collection.photoAssets = self.photos;
+        collection.needRightBtn = self.needRightBtn;
         [self.view addSubview:collection];
         _collection = collection;
-        _collection.selectImage = self.selectAssets;
-        _collection.needRightBtn = self.needRightBtn;
         
         __weak __typeof(self)weakSelf = self;
-        __weak __typeof(_collection)weakCollect = _collection;
-        
         _collection.touchitem = ^(NSInteger index) {
+            
             __strong __typeof(weakSelf)strongSelf = weakSelf;
-            QSBrowserViewController *vc = [[QSBrowserViewController alloc] init];
+            QSBrowserViewController *vc = [[QSBrowserViewController alloc] initWithCurrentIndex:index recordSelectCount:^{
+                strongSelf.bottomView.selectCount = QSPhotoManage.selectAssets.count;
+            }];
+            
             vc.assets = strongSelf.photos;
-            vc.currentIndex = index;
-            vc.selectAssets = strongSelf.selectAssets;
             vc.maxCount = strongSelf.maxCount;
             vc.needRightBtn = strongSelf.needRightBtn;
-            vc.recordCallBack = ^(NSMutableArray *selectAsset) {
-                strongSelf.selectAssets = selectAsset;
-                strongSelf.bottom.selectCount = selectAsset.count;
-            };
+            
             [strongSelf.navigationController pushViewController:vc animated:YES];
         };
         
         _collection.selectCallBack = ^(QSPhotoAsset *asset,BOOL isSelected) {
             __strong __typeof(weakSelf)strongSelf = weakSelf;
-            if (strongSelf.selectAssets.count == strongSelf.maxCount && isSelected) {
-                NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",strongSelf.selectAssets.count];
+            if (QSPhotoManage.selectAssets.count == strongSelf.maxCount && isSelected) {
+                NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",QSPhotoManage.selectAssets.count];
                 [Utils showAlertViewWithController:strongSelf title:@"提示" message:message confirmButton:nil];
                 return NO;
             } else if (!isSelected) {
-                for (QSPhotoAsset *result in strongSelf.selectAssets) {
+                for (QSPhotoAsset *result in QSPhotoManage.selectAssets) {
                     if ([[result getAssetLocalIdentifier] isEqualToString:[asset getAssetLocalIdentifier]]) {
-                        [strongSelf.selectAssets removeObject:result];
+                        [QSPhotoManage.selectAssets removeObject:result];
                         break;
                     }
                 }
             } else {
-                [strongSelf.selectAssets addObject:asset];
+                [QSPhotoManage.selectAssets addObject:asset];
             }
-            weakCollect.selectImage = strongSelf.selectAssets;
-            strongSelf.bottom.selectCount = strongSelf.selectAssets.count;
+            strongSelf.bottomView.selectCount = QSPhotoManage.selectAssets.count;
             return YES;
         };
     }
     return _collection;
 }
 
-
--(NSMutableArray<QSPhotoAsset *> *)selectAssets {
-    if (!_selectAssets) {
-        _selectAssets = [NSMutableArray array];
+-(QSPhotosBottomView *)bottomView {
+    if (!_bottomView) {
+        QSPhotosBottomView *bottomView = [[QSPhotosBottomView alloc] initSelectBottomViewWithFrame:CGRectMake(0, CGRectGetMaxY(self.collection.frame), self.view.frame.size.width, TOOLBAR_HEIGHT)];
+        
+        bottomView.delegate = self;
+        [self.view addSubview:bottomView];
+        _bottomView = bottomView;
     }
-    return _selectAssets;
+    return _bottomView;
 }
 
-- (void)dealloc
-{
-    NSLog(@"%s",__func__);
-}
-
-#pragma mark - delete
-
-//- (instancetype)initWithTitle:(NSString *)title assets:(NSArray<QSPhotoAsset *> *)assets {
-//    self = [super init];
-//    if (self) {
-//        _photos = [assets mutableCopy];
-//        [self.view setBackgroundColor:[UIColor whiteColor]];
-//        self.title = title;
-//    }
-//    return self;
-//}
 
 @end

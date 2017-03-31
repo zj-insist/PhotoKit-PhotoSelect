@@ -34,11 +34,16 @@ static QSPhotoManage *_instance;
     return _instance;
 }
 
--(NSMutableArray<QSPhotoAsset *> *)selectAsset {
-    if (!_selectAsset) {
-        _selectAsset = [NSMutableArray array];
+-(NSMutableArray<QSPhotoAsset *> *)selectAssets {
+    if (!_selectAssets) {
+        _selectAssets = [NSMutableArray array];
     }
-    return _selectAsset;
+    return _selectAssets;
+}
+
+- (void)resetPhotoManage {
+    self.selectAssets = nil;
+    self.isOrginal = NO;
 }
 
 @end

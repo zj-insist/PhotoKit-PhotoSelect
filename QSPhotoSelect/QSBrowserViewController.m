@@ -13,13 +13,19 @@
 #import "QSPhotosBottomView.h"
 #import "QSBrowserHeadView.h"
 #import "Utils.h"
+#import "MacroDefinition.h"
 
 @interface QSBrowserViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,QSBottomViewDelegate,QSBrowserHeadViewDelegate>
+{
+    RecordSelectCount _recordCallBack;
+}
 
 @property(nonatomic, strong) UICollectionView *collection;
-@property(nonatomic, strong) QSPhotosBottomView *bottom;
-@property(nonatomic, strong) QSBrowserHeadView *headView;
+@property(nonatomic, strong) QSPhotosBottomView *bottomView;
+@property(nonatomic, strong) QSBrowserHeadView *headerView;
 @property(nonatomic, strong) UILabel *indexLabel;
+
+@property(nonatomic, assign) NSUInteger currentIndex;
 
 @end
 
@@ -27,64 +33,43 @@
 
 #pragma mark - life cycle
 
+- (instancetype)initWithCurrentIndex:(NSUInteger)currentIndex recordSelectCount:(RecordSelectCount)callBack {
+    self = [super init];
+    if (self) {
+        _currentIndex = currentIndex;
+        _recordCallBack = callBack;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setupViewController];
-    [self setupBottomView];
-    [self setupIndexLabel];
-    [self setupHeadView];
-    [self setupHeaderViewRightBtnWithIndex:self.currentIndex];
-    [self addTapGesture];
+    self.indexLabel.alpha = 0.f;
     
+    CGPoint point = CGPointMake(self.currentIndex * self.collection.width, 0);
+    self.collection.contentOffset = point;
+    
+    [self setupHeaderViewRightBtnWithIndex:self.currentIndex];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO];
-    self.recordCallBack(self.selectAssets);
+    _recordCallBack();
 }
 
 -(BOOL)prefersStatusBarHidden {
     return YES;
 }
 
-
 #pragma mark - private methods
-
-- (void)setupIndexLabel {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.height - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT)];
-    [label setFont:[UIFont systemFontOfSize:15]];
-    [label setTextColor:[UIColor whiteColor]];
-    [label setTextAlignment:NSTextAlignmentCenter];
-    [label setText:[NSString stringWithFormat:@"%ld/%ld",self.currentIndex+1,self.assets.count]];
-    [self.view addSubview:label];
-    self.indexLabel = label;
-    label.alpha = 0.f;
-}
-
-- (void)setupHeadView {
-    QSBrowserHeadView *headView = [[QSBrowserHeadView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, HEADBAR_HEIGHT)];
-    headView.delegate = self;
-    headView.needCheckedBtn = self.needRightBtn;
-    [self.view addSubview:headView];
-    [self.view bringSubviewToFront:headView];
-    self.headView = headView;
-}
-
--(void)setupBottomView {
-    QSPhotosBottomView *bottomView = [[QSPhotosBottomView alloc]
-                                      initWithFrame:CGRectMake(0, CGRectGetMaxY(self.collection.frame) - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT) bottomViewStyle:QSBottomViewStyleBrowser];
-    bottomView.delegate = self;
-    bottomView.selectCount = self.selectAssets.count;
-    [self.view addSubview:bottomView];
-    [self.view bringSubviewToFront:bottomView];
-    self.bottom = bottomView;
-}
 
 - (void)setupViewController {
     [self.view setBackgroundColor:[UIColor blackColor]];
     [self.navigationController setNavigationBarHidden:YES];
+    [self addTapGesture];
 }
 
 - (void)addTapGesture {
@@ -96,10 +81,26 @@
     static CGFloat alphaValue = 1;
     alphaValue = alphaValue? 0 : 1;
     [UIView animateWithDuration:0.3 animations:^(void) {
-        [_headView setAlpha:alphaValue];
-        [_bottom setAlpha:alphaValue];
+        [_headerView setAlpha:alphaValue];
+        [_bottomView setAlpha:alphaValue];
         [_indexLabel setAlpha:!alphaValue];
     } completion:nil];
+}
+
+- (void)setupHeaderViewRightBtnWithIndex:(NSUInteger)index {
+    self.headerView.isSelected = NO;
+    
+    QSPhotoAsset *asset = self.assets[self.currentIndex];
+    self.bottomView.orginalLength = [asset getOrginalLengthWithUtil];
+    
+    __weak __typeof(self)weakSelf = self;
+    [QSPhotoManage.selectAssets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        if ([[strongSelf.assets[index] getAssetLocalIdentifier] isEqualToString:[obj getAssetLocalIdentifier]]) {
+            strongSelf.headerView.isSelected = YES;
+            *stop = YES;
+        }
+    }];
 }
 
 #pragma mark - CollectionDelegate
@@ -128,39 +129,38 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     self.currentIndex = (NSInteger)((scrollView.contentOffset.x / scrollView.frame.size.width) + 0.5);
-    NSLog(@"%ld",self.currentIndex);
 }
 
 #pragma mark - custom delegate
 
 -(void)QS_bottomViewOrginalBtnTouched:(BOOL)isSelect {
-    QSPhotoAsset *asset = self.assets[self.currentIndex];
-    asset.isOrginal = isSelect;
+    QSPhotoManage.isOrginal = isSelect;
 }
 
 -(void)QS_bottomViewRightBtnTouched {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"completeSelect" object:self.selectAssets];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"completeSelect"
+                                                        object:@{@"selectAssets" : QSPhotoManage.selectAssets,
+                                                                 @"isOrginal" : @(QSPhotoManage.isOrginal)}];
 }
 
 -(BOOL)QS_headerViewRightBtnTouched:(BOOL)isSelected {
     QSPhotoAsset *asset = self.assets[self.currentIndex];
-    if(self.selectAssets.count == self.maxCount && !isSelected){
-        NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",self.selectAssets.count];
+    if(QSPhotoManage.selectAssets.count == self.maxCount && !isSelected){
+        NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",QSPhotoManage.selectAssets.count];
         [Utils showAlertViewWithController:self title:@"提示" message:message confirmButton:nil];
         return NO;
     } else if (isSelected)  {
-        for (QSPhotoAsset *result in self.selectAssets) {
+        for (QSPhotoAsset *result in QSPhotoManage.selectAssets) {
             if ([[result getAssetLocalIdentifier] isEqualToString:[asset getAssetLocalIdentifier]]) {
-                [self.selectAssets removeObject:result];
+                [QSPhotoManage.selectAssets removeObject:result];
                 break;
             }
         }
     } else {
-        asset.isOrginal = self.bottom.isOrginal;
-        [self.selectAssets addObject:asset];
+        [QSPhotoManage.selectAssets addObject:asset];
     }
-    self.bottom.selectCount = self.selectAssets.count;
+    self.bottomView.selectCount = QSPhotoManage.selectAssets.count;
     return YES;
 }
 
@@ -189,8 +189,6 @@
         collectionView.dataSource = self;
         
         [collectionView registerClass:[QSBrowserCell class] forCellWithReuseIdentifier:QSBrowserCellIdentifier];
-        CGPoint point = CGPointMake(self.currentIndex * collectionView.width, 0);
-        collectionView.contentOffset = point;
         
         [self.view addSubview:collectionView];
         _collection = collectionView;
@@ -198,29 +196,50 @@
     return _collection;
 }
 
+-(QSBrowserHeadView *)headerView {
+    if (!_headerView) {
+        QSBrowserHeadView *headView = [[QSBrowserHeadView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, HEADBAR_HEIGHT)];
+        headView.delegate = self;
+        headView.needCheckedBtn = self.needRightBtn;
+        [self.view addSubview:headView];
+        _headerView = headView;
+    }
+    return _headerView;
+}
+
+-(QSPhotosBottomView *)bottomView {
+    if (!_bottomView) {
+        QSPhotosBottomView *bottomView = [[QSPhotosBottomView alloc] initBrowserBottomViewWithFrame:CGRectMake(0, CGRectGetMaxY(self.collection.frame) - TOOLBAR_HEIGHT, self.headerView.frame.size.width, TOOLBAR_HEIGHT) selectState:QSPhotoManage.isOrginal];
+        
+        bottomView.delegate = self;
+        bottomView.selectCount = QSPhotoManage.selectAssets.count;
+        [self.view addSubview:bottomView];
+        _bottomView = bottomView;
+    }
+    return _bottomView;
+}
+
+-(UILabel *)indexLabel {
+    if (!_indexLabel) {
+        UILabel *label = [[UILabel alloc] initWithFrame:self.bottomView.frame];
+        [label setFont:[UIFont systemFontOfSize:15]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setTextAlignment:NSTextAlignmentCenter];
+        [label setText:[NSString stringWithFormat:@"%ld/%ld",self.currentIndex+1,self.assets.count]];
+        [self.view addSubview:label];
+        _indexLabel = label;
+    }
+    return _indexLabel;
+}
 
 -(void)setCurrentIndex:(NSUInteger)currentIndex {
     _currentIndex = currentIndex;
     [self setupHeaderViewRightBtnWithIndex:currentIndex];
     [self.indexLabel setText:[NSString stringWithFormat:@"%ld/%ld",currentIndex+1,self.assets.count]];
+    
     QSPhotoAsset *asset = self.assets[self.currentIndex];
-    self.bottom.orginalLength = [asset getOrginalLengthWithUtil];
+    self.bottomView.orginalLength = [asset getOrginalLengthWithUtil];
 }
 
-- (void)setupHeaderViewRightBtnWithIndex:(NSUInteger)index {
-    self.headView.isSelected = NO;
-    
-    QSPhotoAsset *asset = self.assets[self.currentIndex];
-    self.bottom.orginalLength = [asset getOrginalLengthWithUtil];
-    
-    __weak __typeof(self)weakSelf = self;
-    [self.selectAssets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        __strong __typeof(weakSelf)strongSelf = weakSelf;
-        if ([[strongSelf.assets[index] getAssetLocalIdentifier] isEqualToString:[obj getAssetLocalIdentifier]]) {
-            strongSelf.headView.isSelected = YES;
-            *stop = YES;
-        }
-    }];
-}
 
 @end

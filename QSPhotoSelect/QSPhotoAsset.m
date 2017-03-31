@@ -11,7 +11,6 @@
 
 @interface QSPhotoAsset()
 {
-    PHAsset *_asset;
     PHImageManager *_imageManager;
 }
 @end

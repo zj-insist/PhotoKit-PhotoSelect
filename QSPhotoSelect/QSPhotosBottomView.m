@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
 
 @interface QSPhotosBottomView()
 {
-    QSBottomViewStyle _style;
+    QSPhotoButtonStyle _style;
 }
 @property(nonatomic, strong) UIButton *leftBtn;
 @property(nonatomic, strong) UIButton *rightBtn;
@@ -27,19 +27,31 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
 
 @implementation QSPhotosBottomView
 
-- (instancetype)initWithFrame:(CGRect)frame bottomViewStyle:(QSBottomViewStyle)style {
+- (instancetype)initSelectBottomViewWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setupRightBtn];
-        _style = style;
-        if (style == QSBottomViewStyleSelect) {
-            [self setupLeftBtnWithStyle:QSPHOTOBUTTONSTYLEBROWSER];
-        } else {
-            [self setupLeftBtnWithStyle:QSPHOTOBUTTONSTYLEORIGINAL];
-        }
-        [self setBackgroundColor:UIColorFromRGBA(0x141414,0.7)];
+        [self setupBottomViewWithStyle:QSPHOTOBUTTONSTYLEBROWSER];
     }
     return self;
+}
+
+- (instancetype)initBrowserBottomViewWithFrame:(CGRect)frame selectState:(BOOL)isSelected {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setupBottomViewWithStyle:QSPHOTOBUTTONSTYLEORIGINAL];
+        self.isSelectOrginal = isSelected;
+    }
+    return self;
+}
+
+
+- (void)setupBottomViewWithStyle:(QSPhotoButtonStyle)style {
+    
+    [self setupLeftBtnWithStyle:style];
+    _style = style;
+    [self setupRightBtn];
+    [self setBackgroundColor:UIColorFromRGBA(0x141414,0.7)];
+
 }
 
 -(void)setupLeftBtnWithStyle:(QSPhotoButtonStyle)style {
@@ -86,7 +98,7 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
 #pragma mark - touch event
 
 -(void)leftBtnTouched {
-    if (_style == QSBottomViewStyleSelect) {
+    if (_style == QSPHOTOBUTTONSTYLEBROWSER) {
         if ([self.delegate respondsToSelector:@selector(QS_bottomViewLeftBtnTouched)]) {
             [self.delegate QS_bottomViewLeftBtnTouched];
         }
@@ -120,7 +132,6 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
 -(void)setIsSelectOrginal:(BOOL)isSelectOrginal {
     _isSelectOrginal = isSelectOrginal;
     
-    _isOrginal = isSelectOrginal;
     //TODO:设置按钮的选择状态
     
     if (self.orginalLength && isSelectOrginal) {

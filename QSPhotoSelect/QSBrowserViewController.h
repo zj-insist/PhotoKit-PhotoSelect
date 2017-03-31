@@ -9,20 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "QSPhotoAsset.h"
 
-typedef void (^RecordSelect)(NSMutableArray *selectAssets);
+typedef void (^RecordSelectCount)();
 
 @interface QSBrowserViewController : UIViewController
 
 @property(nonatomic, strong) NSArray<QSPhotoAsset *> *assets;
 
-@property(nonatomic, assign) NSUInteger currentIndex;
-
-@property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *selectAssets;
-
-@property(nonatomic, copy) RecordSelect recordCallBack;
-
 @property(nonatomic, assign) NSUInteger maxCount;
 
 @property(nonatomic, assign) BOOL needRightBtn;
+
+- (instancetype)initWithCurrentIndex:(NSUInteger)currentIndex recordSelectCount:(RecordSelectCount)callBack;
 
 @end

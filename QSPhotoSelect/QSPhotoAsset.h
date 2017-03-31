@@ -18,6 +18,8 @@ typedef void (^ResultData)(NSData *data);
 
 @property(nonatomic, assign) BOOL isOrginal;
 
+@property(nonatomic, strong) PHAsset *asset;
+
 @property(nonatomic, assign, readonly) NSUInteger orginalLength;
 
 - (instancetype)initWithAsset:(PHAsset *)asset;

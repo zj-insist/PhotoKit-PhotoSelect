@@ -32,11 +32,6 @@
     return _photoImage;
 }
 
-//-(void)setPhoto:(UIImage *)photo {
-//    _photo = photo;
-//    [self.photoImage setImage:_photo];
-//}
-
 -(void)setAsset:(QSPhotoAsset *)asset {
     _asset = asset;
     [_asset getFitThumbnailWithSize:CGSizeMake(200, 200) callback:^(UIImage *image) {

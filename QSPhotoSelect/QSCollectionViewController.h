@@ -17,10 +17,8 @@ typedef void (^RecordSelectCallBack)(NSMutableArray <QSPhotoAsset *> *selectAsse
 
 @property(nonatomic, assign) BOOL needRightBtn;
 
-@property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *selectAssets;
 
-- (instancetype)initWithQSPhotoGroup:(QSPhotoGroup *)group recordSeelecte:(RecordSelectCallBack)callBack;
+- (instancetype)initWithQSPhotoGroup:(QSPhotoGroup *)group;
 
-//- (instancetype)initWithQSPhotoGroup:(QSPhotoGroup *)group selectAsset:(NSMutableArray<QSPhotoAsset *> *)assets recordSeelecte:(RecordSelectCallBack)callBack;
 
 @end

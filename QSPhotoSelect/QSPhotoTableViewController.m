@@ -16,23 +16,16 @@
 @interface QSPhotoTableViewController ()<QSCancelBarTouchEvent,UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic, strong) PHFetchResult *allPhotos;
-
-//@property(nonatomic, strong) NSMutableArray<PHAssetCollection *> *smartAlbums;
-//@property(nonatomic, strong) NSMutableArray<PHFetchResult *> *smartAssets;
-
 @property(nonatomic, strong) QSPhotoGroup *allPhotosAlbum;
 @property(nonatomic, strong) NSMutableArray<QSPhotoGroup *> *smartAlbums;
-
 @property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *selectPhotos;
 
 @end
 
 @implementation QSPhotoTableViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self setImageGroup];
     self.title = @"相册选择";
     [Utils addNavBarCancelButtonWithController:self];
 }
@@ -65,14 +58,9 @@
         [cell.textLabel setText:self.allPhotosAlbum.albumName];
         [cell.detailTextLabel setText:[NSString stringWithFormat:@"(%ld)",self.allPhotosAlbum.photoAssets.count]];
     } else {
-//        PHAssetCollection *album = self.smartAlbums[indexPath.row - 1];
-//        [cell.textLabel setText:album.localizedTitle];
-//        [cell.detailTextLabel setText:[NSString stringWithFormat:@"(%ld)",self.smartAssets[indexPath.row - 1].count]];
-        
         QSPhotoGroup *album = self.smartAlbums[indexPath.row - 1];
         [cell.textLabel setText:album.albumName];
         [cell.detailTextLabel setText:[NSString stringWithFormat:@"(%ld)",album.count]];
-        
     }
     return cell;
 }
@@ -80,22 +68,13 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     QSCollectionViewController *vc = nil;
-    __weak __typeof(self)weakSelf = self;
-    __strong __typeof(weakSelf)strongSelf = weakSelf;
     if (indexPath.row == 0) {
-//        vc = [[QSCollectionViewController alloc] initWithTitle:@"全部照片" assets:self.allPhotos];
-        vc = [[QSCollectionViewController alloc] initWithQSPhotoGroup:self.allPhotosAlbum recordSeelecte:^(NSMutableArray<QSPhotoAsset *> *selectAsset) {
-            strongSelf.selectPhotos = selectAsset;
-        }];
+        vc = [[QSCollectionViewController alloc] initWithQSPhotoGroup:self.allPhotosAlbum];
     } else {
-//        PHAssetCollection *album = self.smartAlbums[indexPath.row - 1];
-//        vc = [[QSCollectionViewController alloc] initWithTitle:album.localizedTitle assets:self.smartAssets[indexPath.row - 1]];
         QSPhotoGroup *album = self.smartAlbums[indexPath.row - 1];
-        vc = [[QSCollectionViewController alloc] initWithQSPhotoGroup:album recordSeelecte:^(NSMutableArray<QSPhotoAsset *> *selectAsset) {
-            strongSelf.selectPhotos = selectAsset;
-        }];
+        vc = [[QSCollectionViewController alloc] initWithQSPhotoGroup:album];
     }
-    vc.selectAssets = self.selectPhotos;
+    
     vc.maxCount = self.maxCount;
     vc.needRightBtn = self.needRightBtn;
     [self.navigationController pushViewController:vc animated:YES];
@@ -128,32 +107,8 @@
     return _smartAlbums;
 }
 
-
-#pragma mark - delete
-
-//-(NSMutableArray<PHFetchResult *> *)smartAssets {
-//    if (_smartAssets == nil) {
-//        _smartAssets = [NSMutableArray array];
-//    }
-//    return _smartAssets;
-//}
-
-//-(void)setImageGroup {
-//    PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
-//    allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
-//    self.allPhotos = [PHAsset fetchAssetsWithOptions:nil];
-//
-//    PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum
-//                                                                          subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-//    NSMutableArray *collections = [NSMutableArray array];
-//    for (PHAssetCollection *result in smartAlbums) {
-//        PHFetchResult *photoAsset = [PHAsset fetchAssetsInAssetCollection:result options:nil];
-//        if (photoAsset.count) {
-//            [collections addObject:result];
-//            [self.smartAssets addObject:photoAsset];
-//        }
-//    }
-//    self.smartAlbums = collections;
-//}
+- (void)dealloc {
+    [QSPhotoManage resetPhotoManage];
+}
 
 @end

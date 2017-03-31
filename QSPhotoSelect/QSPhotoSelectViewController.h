@@ -7,6 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QSPhotoAsset.h"
+
+typedef void (^SelectImagesCallBack)(NSArray<UIImage *> *images);
+
+typedef void (^SelectAssetsCallBack)(NSArray<PHAsset *> *asset, BOOL isOrginal);
 
 @interface QSPhotoSelectViewController : UINavigationController
 
@@ -14,5 +19,8 @@
 
 @property(nonatomic, assign) BOOL needRightBtn;
 
+- (instancetype)initWithImagesCallBack:(SelectImagesCallBack)callBack;
+
+- (instancetype)initWithAssetsCallBack:(SelectAssetsCallBack)callBack;
 
 @end

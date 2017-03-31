@@ -11,10 +11,12 @@
 
 @interface QSPhotoManage : NSObject
 
-@property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *selectAsset;
+@property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *selectAssets;
 
 @property(nonatomic, assign) BOOL isOrginal;
 
 +(instancetype)shareQSPhotoManage;
+
+- (void)resetPhotoManage;
 
 @end

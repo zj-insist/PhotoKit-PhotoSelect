@@ -8,11 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSUInteger, QSBottomViewStyle) {
-    QSBottomViewStyleSelect,
-    QSBottomViewStyleBrowser
-};
-
 @protocol QSBottomViewDelegate <NSObject>
 
 @optional
@@ -30,10 +25,11 @@ typedef void (^TouchBottomViewButton)();
 
 @property(nonatomic, strong) NSString *orginalLength;
 
-@property(nonatomic, assign, readonly) BOOL isOrginal;
+//@property(nonatomic, assign, readonly) BOOL isOrginal;
 
 @property(nonatomic, weak) id<QSBottomViewDelegate> delegate;
 
-- (instancetype)initWithFrame:(CGRect)frame bottomViewStyle:(QSBottomViewStyle)style;
+- (instancetype)initSelectBottomViewWithFrame:(CGRect)frame;
 
+- (instancetype)initBrowserBottomViewWithFrame:(CGRect)frame selectState:(BOOL)isSelected;
 @end
