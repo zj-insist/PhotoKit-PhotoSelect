@@ -25,6 +25,8 @@
 
 @implementation QSBrowserViewController
 
+#pragma mark - life cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -33,6 +35,7 @@
     [self setupIndexLabel];
     [self setupHeadView];
     [self setupHeaderViewRightBtnWithIndex:self.currentIndex];
+    [self addTapGesture];
     
 }
 
@@ -42,15 +45,22 @@
     self.recordCallBack(self.selectAssets);
 }
 
+-(BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
+
+#pragma mark - private methods
+
 - (void)setupIndexLabel {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.height - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT)];
     [label setFont:[UIFont systemFontOfSize:15]];
     [label setTextColor:[UIColor whiteColor]];
     [label setTextAlignment:NSTextAlignmentCenter];
-    [label setText:[NSString stringWithFormat:@"%ld/%ld",self.currentIndex,self.assets.count]];
+    [label setText:[NSString stringWithFormat:@"%ld/%ld",self.currentIndex+1,self.assets.count]];
     [self.view addSubview:label];
     self.indexLabel = label;
-    [label setHidden:YES];
+    label.alpha = 0.f;
 }
 
 - (void)setupHeadView {
@@ -70,7 +80,6 @@
     [self.view addSubview:bottomView];
     [self.view bringSubviewToFront:bottomView];
     self.bottom = bottomView;
-    //    [bottomView setHidden:YES];
 }
 
 - (void)setupViewController {
@@ -78,8 +87,19 @@
     [self.navigationController setNavigationBarHidden:YES];
 }
 
--(BOOL)prefersStatusBarHidden {
-    return YES;
+- (void)addTapGesture {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapSetupUI)];
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)singleTapSetupUI {
+    static CGFloat alphaValue = 1;
+    alphaValue = alphaValue? 0 : 1;
+    [UIView animateWithDuration:0.3 animations:^(void) {
+        [_headView setAlpha:alphaValue];
+        [_bottom setAlpha:alphaValue];
+        [_indexLabel setAlpha:!alphaValue];
+    } completion:nil];
 }
 
 #pragma mark - CollectionDelegate
@@ -119,7 +139,8 @@
 }
 
 -(void)QS_bottomViewRightBtnTouched {
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"completeSelect" object:self.selectAssets];
 }
 
 -(BOOL)QS_headerViewRightBtnTouched:(BOOL)isSelected {
@@ -180,7 +201,7 @@
 -(void)setCurrentIndex:(NSUInteger)currentIndex {
     _currentIndex = currentIndex;
     [self setupHeaderViewRightBtnWithIndex:currentIndex];
-    [self.indexLabel setText:[NSString stringWithFormat:@"%ld/%ld",currentIndex,self.assets.count]];
+    [self.indexLabel setText:[NSString stringWithFormat:@"%ld/%ld",currentIndex+1,self.assets.count]];
 }
 
 - (void)setupHeaderViewRightBtnWithIndex:(NSUInteger)index {

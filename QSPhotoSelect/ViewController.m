@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "QSPhotoSelectViewController.h"
 #import "QSPhotoGroup.h"
+#import "Utils.h"
 
 @interface ViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *photo;
@@ -24,6 +25,18 @@
     [asset getFillThumbnailWithSize:CGSizeMake(200, 200) callback:^(UIImage *image) {
         [self.photo setImage:image];
     }];
+    
+    [self addNotification];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    NSLog(@"%s",__func__);
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    NSLog(@"%s",__func__);
 }
 
 - (IBAction)selectPhotos:(UIButton *)sender {
@@ -57,6 +70,21 @@
     vc.needRightBtn = YES;
     
     [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)addNotification {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(completeSelect:) name:@"completeSelect" object:nil];
+}
+
+- (void)completeSelect:(NSNotification *)notif {
+    NSLog(@"%@",notif.object);
+    NSArray *arr = notif.object;
+    NSString *message = [NSString stringWithFormat:@"选择了%ld张照片",arr.count];
+        [Utils showAlertViewWithController:self title:@"选择完成" message:message confirmButton:nil];
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"completeSelect" object:nil];
 }
 
 @end

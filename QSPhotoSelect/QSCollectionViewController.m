@@ -108,10 +108,26 @@
 
 -(void)QS_bottomViewLeftBtnTouched {
     NSLog(@"预览选中的%ld张图片",self.selectAssets.count);
+    QSBrowserViewController *vc = [[QSBrowserViewController alloc] init];
+    vc.assets = [self.selectAssets mutableCopy];
+    vc.currentIndex = 0;
+    vc.selectAssets = self.selectAssets;
+    vc.maxCount = self.maxCount;
+    vc.needRightBtn = self.needRightBtn;
+    __weak __typeof(self)weakSelf = self;
+    vc.recordCallBack = ^(NSMutableArray *selectAsset) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        strongSelf.selectAssets = selectAsset;
+        strongSelf.bottom.selectCount = selectAsset.count;
+    };
+    [self.navigationController pushViewController:vc animated:YES];
+
 }
 
 -(void)QS_bottomViewRightBtnTouched {
     NSLog(@"完成选择，一共%ld张图片",self.selectAssets.count);
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"completeSelect" object:self.selectAssets];
 }
 
 #pragma mark - setter and getter
@@ -183,7 +199,10 @@
     return _selectAssets;
 }
 
-
+- (void)dealloc
+{
+    NSLog(@"%s",__func__);
+}
 
 #pragma mark - delete
 
