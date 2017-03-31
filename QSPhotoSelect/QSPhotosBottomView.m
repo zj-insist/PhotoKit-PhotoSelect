@@ -16,15 +16,12 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
 };
 
 @interface QSPhotosBottomView()
-
 {
     QSBottomViewStyle _style;
 }
-
 @property(nonatomic, strong) UIButton *leftBtn;
 @property(nonatomic, strong) UIButton *rightBtn;
 @property(nonatomic, assign) BOOL isSelectOrginal;
-@property(nonatomic, strong) NSString *dataLength;
 
 @end
 
@@ -53,8 +50,6 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
     [self addSubview:btn];
     self.leftBtn = btn;
 }
-
-
 
 -(void)setupRightBtn {
     
@@ -88,6 +83,28 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
     return btn;
 }
 
+#pragma mark - touch event
+
+-(void)leftBtnTouched {
+    if (_style == QSBottomViewStyleSelect) {
+        if ([self.delegate respondsToSelector:@selector(QS_bottomViewLeftBtnTouched)]) {
+            [self.delegate QS_bottomViewLeftBtnTouched];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(QS_bottomViewOrginalBtnTouched:)]) {
+            self.isSelectOrginal = !self.isSelectOrginal;
+            [self.delegate QS_bottomViewOrginalBtnTouched:self.isSelectOrginal];
+        }
+    }
+}
+
+- (void)rightBtnTouched {
+    if ([self.delegate respondsToSelector:@selector(QS_bottomViewRightBtnTouched)]) {
+        [self.delegate QS_bottomViewRightBtnTouched];
+    }
+}
+
+#pragma mark - setter and getter
 
 -(void)setSelectCount:(NSUInteger)selectCount {
     _selectCount = selectCount;
@@ -102,29 +119,23 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
 
 -(void)setIsSelectOrginal:(BOOL)isSelectOrginal {
     _isSelectOrginal = isSelectOrginal;
-    if (!self.dataLength) {
+    
+    _isOrginal = isSelectOrginal;
+    //TODO:设置按钮的选择状态
+    
+    if (self.orginalLength && isSelectOrginal) {
+        [self.leftBtn setTitle:[NSString stringWithFormat:@"原图(%@)",self.orginalLength] forState:UIControlStateNormal];
+    } else {
         [self.leftBtn setTitle:@"原图" forState:UIControlStateNormal];
-    } else {
-        [self.leftBtn setTitle:[NSString stringWithFormat:@"原图(%@)",self.dataLength] forState:UIControlStateNormal];
     }
 }
 
--(void)leftBtnTouched {
-    if (_style == QSBottomViewStyleSelect) {
-        if ([self.delegate respondsToSelector:@selector(QS_bottomViewLeftBtnTouched)]) {
-            [self.delegate QS_bottomViewLeftBtnTouched];
-        }
+-(void)setOrginalLength:(NSString *)orginalLength {
+    _orginalLength = orginalLength;
+    if (_orginalLength && self.isSelectOrginal) {
+        [self.leftBtn setTitle:[NSString stringWithFormat:@"原图(%@)",self.orginalLength] forState:UIControlStateNormal];
     } else {
-        if ([self.delegate respondsToSelector:@selector(QS_bottomViewOrginalBtnTouched)]) {
-            self.isSelectOrginal = !self.isSelectOrginal;
-            self.dataLength = self.isSelectOrginal ? [self.delegate QS_bottomViewOrginalBtnTouched] : nil;
-        }
-    }
-}
-
-- (void)rightBtnTouched {
-    if ([self.delegate respondsToSelector:@selector(QS_bottomViewRightBtnTouched)]) {
-        [self.delegate QS_bottomViewRightBtnTouched];
+        [self.leftBtn setTitle:@"原图" forState:UIControlStateNormal];
     }
 }
 

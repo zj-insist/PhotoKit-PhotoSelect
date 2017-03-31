@@ -18,7 +18,7 @@ typedef NS_ENUM(NSUInteger, QSBottomViewStyle) {
 @optional
 -(void)QS_bottomViewLeftBtnTouched;
 -(void)QS_bottomViewRightBtnTouched;
--(NSString *)QS_bottomViewOrginalBtnTouched;
+-(void)QS_bottomViewOrginalBtnTouched:(BOOL)isSelect;
 
 @end
 
@@ -27,6 +27,10 @@ typedef void (^TouchBottomViewButton)();
 @interface QSPhotosBottomView : UIView
 
 @property(nonatomic, assign) NSUInteger selectCount;
+
+@property(nonatomic, strong) NSString *orginalLength;
+
+@property(nonatomic, assign, readonly) BOOL isOrginal;
 
 @property(nonatomic, weak) id<QSBottomViewDelegate> delegate;
 

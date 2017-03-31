@@ -134,8 +134,9 @@
 
 #pragma mark - custom delegate
 
--(NSString *)QS_bottomViewOrginalBtnTouched {
-    return [self.assets[self.currentIndex] getOrginalLengthWithUtil];
+-(void)QS_bottomViewOrginalBtnTouched:(BOOL)isSelect {
+    QSPhotoAsset *asset = self.assets[self.currentIndex];
+    asset.isOrginal = isSelect;
 }
 
 -(void)QS_bottomViewRightBtnTouched {
@@ -157,6 +158,7 @@
             }
         }
     } else {
+        asset.isOrginal = self.bottom.isOrginal;
         [self.selectAssets addObject:asset];
     }
     self.bottom.selectCount = self.selectAssets.count;
@@ -202,10 +204,16 @@
     _currentIndex = currentIndex;
     [self setupHeaderViewRightBtnWithIndex:currentIndex];
     [self.indexLabel setText:[NSString stringWithFormat:@"%ld/%ld",currentIndex+1,self.assets.count]];
+    QSPhotoAsset *asset = self.assets[self.currentIndex];
+    self.bottom.orginalLength = [asset getOrginalLengthWithUtil];
 }
 
 - (void)setupHeaderViewRightBtnWithIndex:(NSUInteger)index {
     self.headView.isSelected = NO;
+    
+    QSPhotoAsset *asset = self.assets[self.currentIndex];
+    self.bottom.orginalLength = [asset getOrginalLengthWithUtil];
+    
     __weak __typeof(self)weakSelf = self;
     [self.selectAssets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
