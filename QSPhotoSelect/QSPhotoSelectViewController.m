@@ -79,6 +79,7 @@
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     for (NSUInteger index = 0; index < assets.count; index++) {
         QSPhotoAsset *asset = [assets objectAtIndex:index];
+        //TODO:下载过程添加遮罩
         [asset getOriginalWithCallback:^(UIImage *image) {
             [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",index]];
         }];
