@@ -25,6 +25,7 @@
 		187A5BF11E811C020040C93F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187A5BEF1E811C020040C93F /* LaunchScreen.storyboard */; };
 		187A5BFC1E811C020040C93F /* QSPhotoSelectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 187A5BFB1E811C020040C93F /* QSPhotoSelectTests.m */; };
 		187A5C071E811C020040C93F /* QSPhotoSelectUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 187A5C061E811C020040C93F /* QSPhotoSelectUITests.m */; };
+		1896B2401E8E30DF002B8D3A /* QSPhotoManage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1896B23F1E8E30DF002B8D3A /* QSPhotoManage.m */; };
 		18C7B1331E8B939000697DF9 /* QSBrowserHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C7B1321E8B939000697DF9 /* QSBrowserHeadView.m */; };
 		18E493851E825D100088BF8C /* QSPhotosCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E493841E825D100088BF8C /* QSPhotosCollectionView.m */; };
 		18E493881E8267C10088BF8C /* QSCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E493871E8267C10088BF8C /* QSCollectionViewController.m */; };
@@ -86,6 +87,8 @@
 		187A5C021E811C020040C93F /* QSPhotoSelectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QSPhotoSelectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		187A5C061E811C020040C93F /* QSPhotoSelectUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSPhotoSelectUITests.m; sourceTree = "<group>"; };
 		187A5C081E811C020040C93F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1896B23E1E8E30DF002B8D3A /* QSPhotoManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSPhotoManage.h; sourceTree = "<group>"; };
+		1896B23F1E8E30DF002B8D3A /* QSPhotoManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSPhotoManage.m; sourceTree = "<group>"; };
 		18B845D51E8A6961003B3907 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		18C7B1311E8B939000697DF9 /* QSBrowserHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSBrowserHeadView.h; sourceTree = "<group>"; };
 		18C7B1321E8B939000697DF9 /* QSBrowserHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSBrowserHeadView.m; sourceTree = "<group>"; };
@@ -195,6 +198,8 @@
 		187705341E8A021200E93DE6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				1896B23E1E8E30DF002B8D3A /* QSPhotoManage.h */,
+				1896B23F1E8E30DF002B8D3A /* QSPhotoManage.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -463,6 +468,7 @@
 				187705431E8A163B00E93DE6 /* Utils.m in Sources */,
 				18E493851E825D100088BF8C /* QSPhotosCollectionView.m in Sources */,
 				181A7F571E83AF580022DCF2 /* QSPhotosBottomView.m in Sources */,
+				1896B2401E8E30DF002B8D3A /* QSPhotoManage.m in Sources */,
 				18C7B1331E8B939000697DF9 /* QSBrowserHeadView.m in Sources */,
 				181A7F5A1E83CCB30022DCF2 /* QSPhotoSelectViewController.m in Sources */,
 				18711D1C1E84C52B00CB3CB7 /* QSPhotoAsset.m in Sources */,

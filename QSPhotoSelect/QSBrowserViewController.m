@@ -110,7 +110,6 @@
     [asset getOriginalWithCallback:^(UIImage *image) {
         cell.image = image;
     }];
-    
     return cell;
 }
 
