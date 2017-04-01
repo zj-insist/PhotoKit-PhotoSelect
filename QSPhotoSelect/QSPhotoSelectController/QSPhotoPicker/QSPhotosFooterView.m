@@ -30,7 +30,7 @@
 -(void)setPhotoCount:(NSUInteger)photoCount {
     _photoCount = photoCount;
     if (_photoCount > 0) {
-        [self.footerLabel setText:[NSString stringWithFormat:@"共 %ld 张照片",_photoCount]];
+        [self.footerLabel setText:[NSString stringWithFormat:@"共 %ld 张照片",(unsigned long)_photoCount]];
     }
 }
 

@@ -149,7 +149,7 @@
         _collection.selectCallBack = ^(QSPhotoAsset *asset,BOOL isSelected) {
             __strong __typeof(weakSelf)strongSelf = weakSelf;
             if (QSPhotoManage.selectAssets.count == strongSelf.maxCount && isSelected) {
-                NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",QSPhotoManage.selectAssets.count];
+                NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",(unsigned long)QSPhotoManage.selectAssets.count];
                 [Utils showAlertViewWithController:strongSelf title:@"提示" message:message confirmButton:nil];
                 return NO;
             } else if (!isSelected) {

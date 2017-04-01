@@ -109,12 +109,12 @@ typedef void (^CompletionDownload)(NSArray *images);
         
         [obj getOriginalWithCallback:^(UIImage *image,NSString *assetIdentifier) {
             
-            [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",idx]];
+            [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",(unsigned long)idx]];
             imageCount++;
             if (imageCount == assetsCount) {
                 NSMutableArray *images = [NSMutableArray array];
                 for (NSUInteger index = 0; index < assets.count; index++) {
-                    NSString *dicIndex = [NSString stringWithFormat:@"%ld",index];
+                    NSString *dicIndex = [NSString stringWithFormat:@"%ld",(unsigned long)index];
                     [images addObject:[dic objectForKey:dicIndex]];
                 }
                 completion(images);
@@ -132,12 +132,12 @@ typedef void (^CompletionDownload)(NSArray *images);
     
     [assets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj getImageWithCallback:^(UIImage *image, NSString *assetIdentifier) {
-                [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",idx]];
+                [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",(unsigned long)idx]];
                 imageCount++;
             if (imageCount == assetsCount) {
                 NSMutableArray *images = [NSMutableArray array];
                 for (NSUInteger index = 0; index < assets.count; index++) {
-                    NSString *dicIndex = [NSString stringWithFormat:@"%ld",index];
+                    NSString *dicIndex = [NSString stringWithFormat:@"%ld",(unsigned long)index];
                     [images addObject:[dic objectForKey:dicIndex]];
                 }
                 completion(images);

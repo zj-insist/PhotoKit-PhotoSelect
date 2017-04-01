@@ -64,12 +64,13 @@
     return YES;
 }
 
+
 #pragma mark - private methods
 
 - (void)setupViewController {
     [self.view setBackgroundColor:[UIColor blackColor]];
-    [self.navigationController setNavigationBarHidden:YES];
     [self addTapGesture];
+    [self.navigationController setNavigationBarHidden:YES];
 }
 
 - (void)addTapGesture {
@@ -108,9 +109,14 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     QSBrowserCell *cell = [QSBrowserCell cellWithCollectionView:collectionView cellForItemAtIndexPath:indexPath];
     QSPhotoAsset *asset = self.assets[indexPath.item];
-    [asset getOriginalWithCallback:^(UIImage *image, NSString *assetIdentifier) {
+//    [asset getOriginalWithCallback:^(UIImage *image, NSString *assetIdentifier) {
+//        cell.image = image;
+//    }];
+    
+    [asset getImageWithCallback:^(UIImage *image, NSString *assetIdentifier) {
         cell.image = image;
     }];
+    
     return cell;
 }
 
@@ -147,7 +153,7 @@
 -(BOOL)QS_headerViewRightBtnTouched:(BOOL)isSelected {
     QSPhotoAsset *asset = self.assets[self.currentIndex];
     if(QSPhotoManage.selectAssets.count == self.maxCount && !isSelected){
-        NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",QSPhotoManage.selectAssets.count];
+        NSString *message = [NSString stringWithFormat:@"最多只能选择%ld张图片",(unsigned long)QSPhotoManage.selectAssets.count];
         [Utils showAlertViewWithController:self title:@"提示" message:message confirmButton:nil];
         return NO;
     } else if (isSelected)  {
@@ -225,7 +231,7 @@
         [label setFont:[UIFont systemFontOfSize:15]];
         [label setTextColor:[UIColor whiteColor]];
         [label setTextAlignment:NSTextAlignmentCenter];
-        [label setText:[NSString stringWithFormat:@"%ld/%ld",self.currentIndex+1,self.assets.count]];
+        [label setText:[NSString stringWithFormat:@"%ld/%ld",(unsigned long)(self.currentIndex+1),(unsigned long)self.assets.count]];
         [self.view addSubview:label];
         _indexLabel = label;
     }
@@ -235,7 +241,7 @@
 -(void)setCurrentIndex:(NSUInteger)currentIndex {
     _currentIndex = currentIndex;
     [self setupHeaderViewRightBtnWithIndex:currentIndex];
-    [self.indexLabel setText:[NSString stringWithFormat:@"%ld/%ld",currentIndex+1,self.assets.count]];
+    [self.indexLabel setText:[NSString stringWithFormat:@"%ld/%ld",(currentIndex+1),self.assets.count]];
     
     QSPhotoAsset *asset = self.assets[self.currentIndex];
     self.bottomView.orginalLength = [asset getOrginalLengthWithUtil];

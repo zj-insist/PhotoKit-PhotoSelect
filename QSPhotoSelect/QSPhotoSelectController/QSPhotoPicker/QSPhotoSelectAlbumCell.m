@@ -69,7 +69,7 @@
     self.albumNameLabel.frame = CGRectMake(CGRectGetMaxX(self.browserImageView.frame) + ALBUMCELL_SPACE, 0, nameWidth, height);
     [self.albumNameLabel setText:group.albumName];
     
-    NSString *countStr = [NSString stringWithFormat:@"(%ld)",group.count];
+    NSString *countStr = [NSString stringWithFormat:@"(%ld)",(unsigned long)group.count];
     CGFloat countWidth = [Utils getWidthWithText:countStr height:height font:17];
     self.albumCountLabel.frame = CGRectMake(CGRectGetMaxX(self.albumNameLabel.frame) + ALBUMCELL_SPACE, 0, countWidth, height);
     [self.albumCountLabel setText:countStr];

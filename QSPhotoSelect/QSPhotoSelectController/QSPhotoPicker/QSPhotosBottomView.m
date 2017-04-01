@@ -121,7 +121,7 @@ typedef NS_ENUM(NSUInteger, QSPhotoButtonStyle) {
 -(void)setSelectCount:(NSUInteger)selectCount {
     _selectCount = selectCount;
     if (_selectCount > 0) {
-        [self.rightBtn setTitle:[NSString stringWithFormat:@"(%ld) 完成",_selectCount] forState:UIControlStateNormal];
+        [self.rightBtn setTitle:[NSString stringWithFormat:@"(%ld) 完成",(unsigned long)_selectCount] forState:UIControlStateNormal];
         self.rightBtn.enabled = YES;
     } else {
         [self.rightBtn setTitle:@"完成" forState:UIControlStateNormal];
