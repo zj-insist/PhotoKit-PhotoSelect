@@ -8,7 +8,7 @@
 
 #import "QSPhotoSelectViewController.h"
 #import "QSPhotoTableViewController.h"
-#import "Utils.h"
+
 typedef void (^CompletionDownload)(NSArray *images);
 
 @interface QSPhotoSelectViewController ()
@@ -21,11 +21,14 @@ typedef void (^CompletionDownload)(NSArray *images);
 
 @implementation QSPhotoSelectViewController
 
+#pragma mark - life cycle
+
 - (instancetype)init {
     QSPhotoTableViewController *vc = [QSPhotoSelectViewController creatQSPhotoTableViewController];
     self = [super initWithRootViewController:vc];
     if (self) {
-        self.tableViewVC = vc;
+        _tableViewVC = vc;
+        _maxCount = 1;
     }
     return self;
 }
@@ -46,16 +49,21 @@ typedef void (^CompletionDownload)(NSArray *images);
     return self;
 }
 
-+ (QSPhotoTableViewController *)creatQSPhotoTableViewController {
-    return (QSPhotoTableViewController *)[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"AlbumSelect"];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self addNotification];
 }
 
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"completeSelect" object:nil];
+}
+
+#pragma mark - private methods
+
++ (QSPhotoTableViewController *)creatQSPhotoTableViewController {
+    return (QSPhotoTableViewController *)[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"AlbumSelect"];
+}
 
 - (void)addNotification {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(completeSelect:) name:@"completeSelect" object:nil];
@@ -117,7 +125,7 @@ typedef void (^CompletionDownload)(NSArray *images);
     NSUInteger assetsCount = assets.count;
     
     [assets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [obj getFitThumbnailWithSize:[Utils getLimitSize:CGSizeMake(obj.pixelWidth, obj.pixelHeight)] callback:^(UIImage *image, NSString *assetIdentifier) {
+        [obj getImageWithCallback:^(UIImage *image, NSString *assetIdentifier) {
                 [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",idx]];
                 imageCount++;
             if (imageCount == assetsCount) {
@@ -132,14 +140,14 @@ typedef void (^CompletionDownload)(NSArray *images);
     }];
 }
 
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"completeSelect" object:nil];
-}
+#pragma mark - setter and getter
 
 -(void)setMaxCount:(NSUInteger)maxCount {
     if (maxCount <= 0) return;
-    _maxCount = maxCount;
-    self.tableViewVC.maxCount = maxCount;
+    if (maxCount > 9 ) {
+        _maxCount = 9;
+    }
+    self.tableViewVC.maxCount = _maxCount;
 }
 
 -(void)setNeedRightBtn:(BOOL)needRightBtn {

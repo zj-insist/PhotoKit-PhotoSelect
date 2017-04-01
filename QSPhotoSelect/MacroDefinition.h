@@ -15,6 +15,6 @@
 
 #define QSPhotoManage [QSPhotoManage shareQSPhotoManage]
 
-#define QSPhotoMaxSize 3000.f
+#define QSPhotoThumbnailSize CGSizeMake(200, 200)
 
 #endif /* MacroDefinition_h */

@@ -24,7 +24,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     QSPhotoGroup *group = [[QSPhotoGroup alloc] initWithFetchResult:nil withGroupType:QSPhotoGroupAllPhoto];
     QSPhotoAsset *asset = [group.photoAssets firstObject];
-    [asset getFillThumbnailWithSize:CGSizeMake(200, 200) callback:^(UIImage *image,NSString *assetIdentifier) {
+    [asset getFitThumbnailWithSize:CGSizeMake(200, 200) callback:^(UIImage *image, NSString *assetIdentifier) {
         [self.photo setImage:image];
     }];
 }

@@ -8,6 +8,7 @@
 
 #import "Utils.h"
 #import "MacroDefinition.h"
+#import "Constants.h"
 
 
 @implementation Utils
@@ -38,17 +39,24 @@
     [controller presentViewController:alertController animated:YES completion:nil];
 }
 
-
 + (CGSize)getLimitSize:(CGSize)size {
+    return [Utils getLimitSize:size maxSize:QSPhotoMaxSize];
+}
+
++ (CGSize)getOrginalLimitSize:(CGSize)size {
+    return [Utils getLimitSize:size maxSize:QSPhotoOrginalMaxSize];
+}
+
++ (CGSize)getLimitSize:(CGSize)size maxSize:(CGFloat)maxSize {
     CGSize limitSize = CGSizeZero;
-    if (size.width < QSPhotoMaxSize && size.height < QSPhotoMaxSize) {
+    if (size.width < maxSize && size.height < maxSize) {
         limitSize = size;
-    } else if (size.width >= QSPhotoMaxSize && size.height < size.width) {
-        limitSize.width = QSPhotoMaxSize;
-        limitSize.height = QSPhotoMaxSize / size.width * size.height;
-    } else if (size.width < size.height && size.height >= QSPhotoMaxSize) {
-        limitSize.height = QSPhotoMaxSize;
-        limitSize.width = QSPhotoMaxSize / size.height * size.width;
+    } else if (size.width >= maxSize && size.height < size.width) {
+        limitSize.width = maxSize;
+        limitSize.height = maxSize / size.width * size.height;
+    } else if (size.width < size.height && size.height >= maxSize) {
+        limitSize.height = maxSize;
+        limitSize.width = maxSize / size.height * size.width;
     }
     return limitSize;
 }

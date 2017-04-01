@@ -26,4 +26,6 @@ typedef void (^ConfirmHandle)();
 
 + (CGSize)getLimitSize:(CGSize)size;
 
++ (CGSize)getOrginalLimitSize:(CGSize)size;
+
 @end

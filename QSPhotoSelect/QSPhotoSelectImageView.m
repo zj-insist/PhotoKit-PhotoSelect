@@ -7,6 +7,7 @@
 //
 
 #import "QSPhotoSelectImageView.h"
+#import "MacroDefinition.h"
 
 @interface QSPhotoSelectImageView()
 
@@ -34,7 +35,7 @@
 
 -(void)setAsset:(QSPhotoAsset *)asset {
     _asset = asset;
-    [_asset getFitThumbnailWithSize:CGSizeMake(200, 200) callback:^(UIImage *image,NSString *assetIdentifier) {
+    [_asset getFitThumbnailWithSize:QSPhotoThumbnailSize callback:^(UIImage *image,NSString *assetIdentifier) {
         [self.photoImage setImage:image];
     }];
 }

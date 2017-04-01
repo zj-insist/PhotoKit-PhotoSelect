@@ -28,9 +28,9 @@ typedef void (^ResultData)(NSData *data,NSString *assetIdentifier);
 
 - (instancetype)initWithAsset:(PHAsset *)asset;
 
--(void)getFillThumbnailWithSize:(CGSize)size callback:(ResultImage)resultBlock;
-
 -(void)getFitThumbnailWithSize:(CGSize)size callback:(ResultImage)resultBlock;
+
+-(void)getImageWithCallback:(ResultImage)resultBlock;
 
 -(void)getOriginalWithCallback:(ResultImage)resultBlock;
 

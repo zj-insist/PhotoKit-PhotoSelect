@@ -8,6 +8,7 @@
 
 #import "QSPhotoAsset.h"
 #import <Photos/Photos.h>
+#import "Utils.h"
 
 @interface QSPhotoAsset()
 
@@ -49,22 +50,22 @@
     return _requestOptions;
 }
 
--(void)getFillThumbnailWithSize:(CGSize)size callback:(ResultImage)resultBlock {
+-(void)getImageWithCallback:(ResultImage)resultBlock {
     
-    [self.imageManager requestImageForAsset:_asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+    [self.imageManager requestImageForAsset:_asset targetSize:[Utils getLimitSize:CGSizeMake(_asset.pixelWidth, _asset.pixelHeight)] contentMode:PHImageContentModeAspectFit options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         resultBlock(result,self.assetIdentifier);
     }];
 }
 
 -(void)getFitThumbnailWithSize:(CGSize)size callback:(ResultImage)resultBlock {
     
-    [self.imageManager requestImageForAsset:_asset targetSize:size contentMode:PHImageContentModeAspectFit options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+    [self.imageManager requestImageForAsset:_asset targetSize:[Utils getLimitSize:size] contentMode:PHImageContentModeAspectFit options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         resultBlock(result,self.assetIdentifier);
     }];
 }
 
 -(void)getOriginalWithCallback:(ResultImage)resultBlock {
-    [self.imageManager requestImageForAsset:_asset targetSize:CGSizeMake(_asset.pixelWidth, _asset.pixelHeight) contentMode:PHImageContentModeAspectFit options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+    [self.imageManager requestImageForAsset:_asset targetSize:[Utils getOrginalLimitSize:CGSizeMake(_asset.pixelWidth, _asset.pixelHeight)] contentMode:PHImageContentModeAspectFit options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         resultBlock(result,self.assetIdentifier);
     }];
 }
