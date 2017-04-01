@@ -24,7 +24,7 @@ typedef void (^CompletionDownload)(NSArray *images);
 #pragma mark - life cycle
 
 - (instancetype)init {
-    QSPhotoTableViewController *vc = [QSPhotoSelectViewController creatQSPhotoTableViewController];
+    QSPhotoTableViewController *vc = [[QSPhotoTableViewController alloc] init];
     self = [super initWithRootViewController:vc];
     if (self) {
         _tableViewVC = vc;
@@ -53,6 +53,11 @@ typedef void (^CompletionDownload)(NSArray *images);
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self addNotification];
+    [self setNavigationBar];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 -(void)dealloc {
@@ -61,8 +66,9 @@ typedef void (^CompletionDownload)(NSArray *images);
 
 #pragma mark - private methods
 
-+ (QSPhotoTableViewController *)creatQSPhotoTableViewController {
-    return (QSPhotoTableViewController *)[[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"AlbumSelect"];
+- (void)setNavigationBar {
+    self.navigationBar.barTintColor = [UIColor blackColor];
+    [self.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName]];
 }
 
 - (void)addNotification {
@@ -147,6 +153,7 @@ typedef void (^CompletionDownload)(NSArray *images);
     if (maxCount > 9 ) {
         _maxCount = 9;
     }
+    _maxCount = maxCount;
     self.tableViewVC.maxCount = _maxCount;
 }
 

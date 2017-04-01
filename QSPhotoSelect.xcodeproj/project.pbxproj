@@ -30,6 +30,15 @@
 		18E493851E825D100088BF8C /* QSPhotosCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E493841E825D100088BF8C /* QSPhotosCollectionView.m */; };
 		18E493881E8267C10088BF8C /* QSCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E493871E8267C10088BF8C /* QSCollectionViewController.m */; };
 		18E4938B1E8291B90088BF8C /* QSPhotoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4938A1E8291B90088BF8C /* QSPhotoTableViewController.m */; };
+		18FE82C21E8F9824007D46F0 /* Back-Button-Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE82BA1E8F9824007D46F0 /* Back-Button-Icon@2x.png */; };
+		18FE82C31E8F9824007D46F0 /* Back-Button-Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE82BB1E8F9824007D46F0 /* Back-Button-Icon@3x.png */; };
+		18FE82C41E8F9824007D46F0 /* checkbox_pic_non@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE82BC1E8F9824007D46F0 /* checkbox_pic_non@2x.png */; };
+		18FE82C51E8F9824007D46F0 /* checkbox_pic_non@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE82BD1E8F9824007D46F0 /* checkbox_pic_non@3x.png */; };
+		18FE82C61E8F9824007D46F0 /* checkbox_pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE82BE1E8F9824007D46F0 /* checkbox_pic@2x.png */; };
+		18FE82C71E8F9824007D46F0 /* checkbox_pic@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE82BF1E8F9824007D46F0 /* checkbox_pic@3x.png */; };
+		18FE82C81E8F9824007D46F0 /* LeftButton_back_Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE82C01E8F9824007D46F0 /* LeftButton_back_Icon@2x.png */; };
+		18FE82C91E8F9824007D46F0 /* LeftButton_back_Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE82C11E8F9824007D46F0 /* LeftButton_back_Icon@3x.png */; };
+		18FE82D01E8F9B18007D46F0 /* QSPhotoSelectAlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FE82CF1E8F9B18007D46F0 /* QSPhotoSelectAlbumCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +107,16 @@
 		18E493871E8267C10088BF8C /* QSCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSCollectionViewController.m; sourceTree = "<group>"; };
 		18E493891E8291B90088BF8C /* QSPhotoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSPhotoTableViewController.h; sourceTree = "<group>"; };
 		18E4938A1E8291B90088BF8C /* QSPhotoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSPhotoTableViewController.m; sourceTree = "<group>"; };
+		18FE82BA1E8F9824007D46F0 /* Back-Button-Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Back-Button-Icon@2x.png"; path = "Images/Back-Button-Icon@2x.png"; sourceTree = "<group>"; };
+		18FE82BB1E8F9824007D46F0 /* Back-Button-Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Back-Button-Icon@3x.png"; path = "Images/Back-Button-Icon@3x.png"; sourceTree = "<group>"; };
+		18FE82BC1E8F9824007D46F0 /* checkbox_pic_non@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox_pic_non@2x.png"; path = "Images/checkbox_pic_non@2x.png"; sourceTree = "<group>"; };
+		18FE82BD1E8F9824007D46F0 /* checkbox_pic_non@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox_pic_non@3x.png"; path = "Images/checkbox_pic_non@3x.png"; sourceTree = "<group>"; };
+		18FE82BE1E8F9824007D46F0 /* checkbox_pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox_pic@2x.png"; path = "Images/checkbox_pic@2x.png"; sourceTree = "<group>"; };
+		18FE82BF1E8F9824007D46F0 /* checkbox_pic@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox_pic@3x.png"; path = "Images/checkbox_pic@3x.png"; sourceTree = "<group>"; };
+		18FE82C01E8F9824007D46F0 /* LeftButton_back_Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LeftButton_back_Icon@2x.png"; path = "Images/LeftButton_back_Icon@2x.png"; sourceTree = "<group>"; };
+		18FE82C11E8F9824007D46F0 /* LeftButton_back_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LeftButton_back_Icon@3x.png"; path = "Images/LeftButton_back_Icon@3x.png"; sourceTree = "<group>"; };
+		18FE82CE1E8F9B18007D46F0 /* QSPhotoSelectAlbumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSPhotoSelectAlbumCell.h; sourceTree = "<group>"; };
+		18FE82CF1E8F9B18007D46F0 /* QSPhotoSelectAlbumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSPhotoSelectAlbumCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,8 +147,6 @@
 		18711D141E84B71800CB3CB7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				187A5BE71E811C020040C93F /* ViewController.h */,
-				187A5BE81E811C020040C93F /* ViewController.m */,
 				18E493861E8267C10088BF8C /* QSCollectionViewController.h */,
 				18E493871E8267C10088BF8C /* QSCollectionViewController.m */,
 				18E493891E8291B90088BF8C /* QSPhotoTableViewController.h */,
@@ -151,6 +168,8 @@
 				18E493841E825D100088BF8C /* QSPhotosCollectionView.m */,
 				181A7F551E83AF580022DCF2 /* QSPhotosBottomView.h */,
 				181A7F561E83AF580022DCF2 /* QSPhotosBottomView.m */,
+				18FE82CE1E8F9B18007D46F0 /* QSPhotoSelectAlbumCell.h */,
+				18FE82CF1E8F9B18007D46F0 /* QSPhotoSelectAlbumCell.m */,
 			);
 			name = VIew;
 			sourceTree = "<group>";
@@ -166,14 +185,14 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		187705311E8A01B900E93DE6 /* QSPhotoSelect */ = {
+		187705311E8A01B900E93DE6 /* QSPhotoPicker */ = {
 			isa = PBXGroup;
 			children = (
 				18711D161E84C2A000CB3CB7 /* Model */,
 				18711D151E84B72B00CB3CB7 /* VIew */,
 				18711D141E84B71800CB3CB7 /* Controller */,
 			);
-			name = QSPhotoSelect;
+			path = QSPhotoPicker;
 			sourceTree = "<group>";
 		};
 		187705321E8A01CF00E93DE6 /* QSPhototBrowser */ = {
@@ -183,7 +202,7 @@
 				187705351E8A021800E93DE6 /* View */,
 				187705331E8A020800E93DE6 /* Controller */,
 			);
-			name = QSPhototBrowser;
+			path = QSPhototBrowser;
 			sourceTree = "<group>";
 		};
 		187705331E8A020800E93DE6 /* Controller */ = {
@@ -223,7 +242,7 @@
 				1877053F1E8A160800E93DE6 /* Utils */,
 				1877053E1E8A15F500E93DE6 /* Macros */,
 			);
-			name = Common;
+			path = Common;
 			sourceTree = "<group>";
 		};
 		1877053E1E8A15F500E93DE6 /* Macros */ = {
@@ -285,9 +304,9 @@
 			children = (
 				187A5BE41E811C020040C93F /* AppDelegate.h */,
 				187A5BE51E811C020040C93F /* AppDelegate.m */,
-				187705321E8A01CF00E93DE6 /* QSPhototBrowser */,
-				187705311E8A01B900E93DE6 /* QSPhotoSelect */,
-				1877053D1E8A15D800E93DE6 /* Common */,
+				187A5BE71E811C020040C93F /* ViewController.h */,
+				187A5BE81E811C020040C93F /* ViewController.m */,
+				18FE82D11E8FB608007D46F0 /* QSPhotoSelectController */,
 				187A5BEA1E811C020040C93F /* Main.storyboard */,
 				187A5BED1E811C020040C93F /* Assets.xcassets */,
 				187A5BEF1E811C020040C93F /* LaunchScreen.storyboard */,
@@ -321,6 +340,32 @@
 				187A5C081E811C020040C93F /* Info.plist */,
 			);
 			path = QSPhotoSelectUITests;
+			sourceTree = "<group>";
+		};
+		18FE82B51E8F96AC007D46F0 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				18FE82BA1E8F9824007D46F0 /* Back-Button-Icon@2x.png */,
+				18FE82BB1E8F9824007D46F0 /* Back-Button-Icon@3x.png */,
+				18FE82BC1E8F9824007D46F0 /* checkbox_pic_non@2x.png */,
+				18FE82BD1E8F9824007D46F0 /* checkbox_pic_non@3x.png */,
+				18FE82BE1E8F9824007D46F0 /* checkbox_pic@2x.png */,
+				18FE82BF1E8F9824007D46F0 /* checkbox_pic@3x.png */,
+				18FE82C01E8F9824007D46F0 /* LeftButton_back_Icon@2x.png */,
+				18FE82C11E8F9824007D46F0 /* LeftButton_back_Icon@3x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		18FE82D11E8FB608007D46F0 /* QSPhotoSelectController */ = {
+			isa = PBXGroup;
+			children = (
+				187705321E8A01CF00E93DE6 /* QSPhototBrowser */,
+				187705311E8A01B900E93DE6 /* QSPhotoPicker */,
+				1877053D1E8A15D800E93DE6 /* Common */,
+				18FE82B51E8F96AC007D46F0 /* Images */,
+			);
+			path = QSPhotoSelectController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -432,9 +477,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18FE82C31E8F9824007D46F0 /* Back-Button-Icon@3x.png in Resources */,
+				18FE82C21E8F9824007D46F0 /* Back-Button-Icon@2x.png in Resources */,
+				18FE82C61E8F9824007D46F0 /* checkbox_pic@2x.png in Resources */,
 				187A5BF11E811C020040C93F /* LaunchScreen.storyboard in Resources */,
 				187A5BEE1E811C020040C93F /* Assets.xcassets in Resources */,
+				18FE82C41E8F9824007D46F0 /* checkbox_pic_non@2x.png in Resources */,
+				18FE82C91E8F9824007D46F0 /* LeftButton_back_Icon@3x.png in Resources */,
+				18FE82C71E8F9824007D46F0 /* checkbox_pic@3x.png in Resources */,
+				18FE82C81E8F9824007D46F0 /* LeftButton_back_Icon@2x.png in Resources */,
 				187A5BEC1E811C020040C93F /* Main.storyboard in Resources */,
+				18FE82C51E8F9824007D46F0 /* checkbox_pic_non@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +523,7 @@
 				181A7F571E83AF580022DCF2 /* QSPhotosBottomView.m in Sources */,
 				1896B2401E8E30DF002B8D3A /* QSPhotoManage.m in Sources */,
 				18C7B1331E8B939000697DF9 /* QSBrowserHeadView.m in Sources */,
+				18FE82D01E8F9B18007D46F0 /* QSPhotoSelectAlbumCell.m in Sources */,
 				181A7F5A1E83CCB30022DCF2 /* QSPhotoSelectViewController.m in Sources */,
 				18711D1C1E84C52B00CB3CB7 /* QSPhotoAsset.m in Sources */,
 				187A5BE61E811C020040C93F /* AppDelegate.m in Sources */,

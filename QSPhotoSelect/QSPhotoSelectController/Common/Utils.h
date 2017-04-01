@@ -28,4 +28,6 @@ typedef void (^ConfirmHandle)();
 
 + (CGSize)getOrginalLimitSize:(CGSize)size;
 
++ (CGFloat)getWidthWithText:(NSString *)text height:(CGFloat)height font:(CGFloat)font;
+
 @end

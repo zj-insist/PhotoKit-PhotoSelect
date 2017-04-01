@@ -12,6 +12,8 @@
 #import "QSPhotoGroup.h"
 #import "Utils.h"
 #import "MacroDefinition.h"
+#import "QSPhotoSelectAlbumCell.h"
+#import "Constants.h"
 
 @interface QSPhotoTableViewController ()<QSCancelBarTouchEvent,UITableViewDelegate,UITableViewDataSource>
 
@@ -26,16 +28,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
     self.title = @"相册选择";
     [Utils addNavBarCancelButtonWithController:self];
-}
-
-- (void)addNavBarCancelButton{
-    UIBarButtonItem *temporaryBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                            target:self
-                                                                                            action:@selector(cancelBtnTouched)];
-    temporaryBarButtonItem.tintColor = UIColorFromRGBA(0x53D107,1.0);
-    self.navigationItem.rightBarButtonItem = temporaryBarButtonItem;
+    [self.tableView registerClass:[QSPhotoSelectAlbumCell class] forCellReuseIdentifier:QSPhotoSelectAlbumCellIdentifier];
+    
 }
 
 - (void) cancelBtnTouched {
@@ -52,15 +50,19 @@
     return self.smartAlbums.count + 1;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return ALBUMCELL_HEIGHT;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TableCell" forIndexPath:indexPath];
+    
+    QSPhotoSelectAlbumCell *cell = [tableView dequeueReusableCellWithIdentifier:QSPhotoSelectAlbumCellIdentifier forIndexPath:indexPath];
+
     if (indexPath.row == 0) {
-        [cell.textLabel setText:self.allPhotosAlbum.albumName];
-        [cell.detailTextLabel setText:[NSString stringWithFormat:@"(%ld)",self.allPhotosAlbum.photoAssets.count]];
+        cell.group = self.allPhotosAlbum;
     } else {
         QSPhotoGroup *album = self.smartAlbums[indexPath.row - 1];
-        [cell.textLabel setText:album.albumName];
-        [cell.detailTextLabel setText:[NSString stringWithFormat:@"(%ld)",album.count]];
+        cell.group = album;
     }
     return cell;
 }

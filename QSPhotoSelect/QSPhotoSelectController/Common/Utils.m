@@ -19,7 +19,7 @@
                                                target:controller
                                                action:@selector(cancelBtnTouched)];
     
-    temporaryBarButtonItem.tintColor = UIColorFromRGBA(0x53D107,1.0);
+    temporaryBarButtonItem.tintColor = [UIColor whiteColor];
     controller.navigationItem.rightBarButtonItem = temporaryBarButtonItem;
     
 }
@@ -59,6 +59,17 @@
         limitSize.width = maxSize / size.height * size.width;
     }
     return limitSize;
+}
+
+
+//根据高度度求宽度  text 计算的内容  Height 计算的高度 font字体大小
++ (CGFloat)getWidthWithText:(NSString *)text height:(CGFloat)height font:(CGFloat)font {
+    
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(MAXFLOAT, height)
+                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                  attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:font]}
+                                     context:nil];
+    return rect.size.width;
 }
 
 

@@ -23,8 +23,13 @@ static CGFloat const HEADBAR_HEIGHT = 64;
 //QSBrowserViewController
 static CGFloat const CELL_SPACE = 20;
 
+//QSPhotoSizeLimit
 static CGFloat const QSPhotoMaxSize = 2000.f;
-
 static CGFloat const QSPhotoOrginalMaxSize = 3000.f;
+
+//QSPhotoAlbumsCell
+static CGFloat const ALBUMCELL_HEIGHT = 60.f;
+static CGFloat const ALBUMCELL_SPACE = 10.f;
+
 
 #endif /* Constants_h */

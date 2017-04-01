@@ -56,7 +56,7 @@
 
 - (void)setBackButtonWithImage {
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"LeftButton_back_Icon"]
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"Back-Button-Icon"]
                                                   imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStyleDone target:self action:@selector(goToBack)];
     self.navigationItem.leftBarButtonItem = backButton;
 }
