@@ -96,7 +96,7 @@
     __weak __typeof(self)weakSelf = self;
     [QSPhotoManage.selectAssets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
-        if ([[strongSelf.assets[index] getAssetLocalIdentifier] isEqualToString:[obj getAssetLocalIdentifier]]) {
+        if ([strongSelf.assets[index].assetIdentifier isEqualToString:obj.assetIdentifier]) {
             strongSelf.headerView.isSelected = YES;
             *stop = YES;
         }
@@ -108,7 +108,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     QSBrowserCell *cell = [QSBrowserCell cellWithCollectionView:collectionView cellForItemAtIndexPath:indexPath];
     QSPhotoAsset *asset = self.assets[indexPath.item];
-    [asset getOriginalWithCallback:^(UIImage *image) {
+    [asset getOriginalWithCallback:^(UIImage *image, NSString *assetIdentifier) {
         cell.image = image;
     }];
     return cell;
@@ -152,7 +152,7 @@
         return NO;
     } else if (isSelected)  {
         for (QSPhotoAsset *result in QSPhotoManage.selectAssets) {
-            if ([[result getAssetLocalIdentifier] isEqualToString:[asset getAssetLocalIdentifier]]) {
+            if ([result.assetIdentifier isEqualToString:asset.assetIdentifier]) {
                 [QSPhotoManage.selectAssets removeObject:result];
                 break;
             }

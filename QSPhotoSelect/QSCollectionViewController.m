@@ -154,7 +154,7 @@
                 return NO;
             } else if (!isSelected) {
                 for (QSPhotoAsset *result in QSPhotoManage.selectAssets) {
-                    if ([[result getAssetLocalIdentifier] isEqualToString:[asset getAssetLocalIdentifier]]) {
+                    if ([result.assetIdentifier isEqualToString:asset.assetIdentifier]) {
                         [QSPhotoManage.selectAssets removeObject:result];
                         break;
                     }

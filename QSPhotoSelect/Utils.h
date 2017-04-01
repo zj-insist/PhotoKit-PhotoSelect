@@ -24,4 +24,6 @@ typedef void (^ConfirmHandle)();
 
 + (void)showAlertViewWithController:(UIViewController *)controller title:(NSString *)title message:(NSString *)message confirmButton:(ConfirmHandle)handle;
 
++ (CGSize)getLimitSize:(CGSize)size;
+
 @end

@@ -15,4 +15,6 @@
 
 #define QSPhotoManage [QSPhotoManage shareQSPhotoManage]
 
+#define QSPhotoMaxSize 3000.f
+
 #endif /* MacroDefinition_h */

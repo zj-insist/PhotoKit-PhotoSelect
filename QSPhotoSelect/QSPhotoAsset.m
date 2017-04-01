@@ -10,9 +10,10 @@
 #import <Photos/Photos.h>
 
 @interface QSPhotoAsset()
-{
-    PHImageManager *_imageManager;
-}
+
+@property(nonatomic, strong) PHImageManager *imageManager;
+
+@property(nonatomic, strong) PHImageRequestOptions *requestOptions;
 @end
 
 @implementation QSPhotoAsset
@@ -22,39 +23,55 @@
     self = [super init];
     if (self) {
         _asset = asset;
-        _imageManager = [PHImageManager defaultManager];
-        [self getImageDataWithCallBack:^(NSData *data) {
+        _assetIdentifier = _asset.localIdentifier;
+        _pixelWidth = asset.pixelWidth;
+        _pixelHeight = asset.pixelHeight;
+        [self getImageDataWithCallBack:^(NSData *data,NSString *assetIdentifier) {
             _orginalLength = data.length;
         }];
     }
     return self;
 }
 
-- (NSString *)getAssetLocalIdentifier {
-    return _asset.localIdentifier;
+-(PHImageManager *)imageManager {
+    if (!_imageManager) {
+        _imageManager = [PHImageManager defaultManager];
+    }
+    return _imageManager;
+}
+
+-(PHImageRequestOptions *)requestOptions {
+    if (!_requestOptions) {
+        _requestOptions = [[PHImageRequestOptions alloc] init];
+        _requestOptions.resizeMode = PHImageRequestOptionsResizeModeFast;
+        _requestOptions.synchronous = YES;
+    }
+    return _requestOptions;
 }
 
 -(void)getFillThumbnailWithSize:(CGSize)size callback:(ResultImage)resultBlock {
-    [_imageManager requestImageForAsset:_asset targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-        resultBlock(result);
+    
+    [self.imageManager requestImageForAsset:_asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        resultBlock(result,self.assetIdentifier);
     }];
 }
 
 -(void)getFitThumbnailWithSize:(CGSize)size callback:(ResultImage)resultBlock {
-    [_imageManager requestImageForAsset:_asset targetSize:size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-        resultBlock(result);
+    
+    [self.imageManager requestImageForAsset:_asset targetSize:size contentMode:PHImageContentModeAspectFit options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        resultBlock(result,self.assetIdentifier);
     }];
 }
 
 -(void)getOriginalWithCallback:(ResultImage)resultBlock {
-    [_imageManager requestImageForAsset:_asset targetSize:CGSizeMake(_asset.pixelWidth, _asset.pixelHeight) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-        resultBlock(result);
+    [self.imageManager requestImageForAsset:_asset targetSize:CGSizeMake(_asset.pixelWidth, _asset.pixelHeight) contentMode:PHImageContentModeAspectFit options:self.requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        resultBlock(result,self.assetIdentifier);
     }];
 }
 
 - (void)getImageDataWithCallBack:(ResultData)resultBlock {
-    [_imageManager requestImageDataForAsset:_asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-        resultBlock(imageData);
+    [self.imageManager requestImageDataForAsset:_asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        resultBlock(imageData,self.assetIdentifier);
     }];
 }
 

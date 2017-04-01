@@ -8,6 +8,8 @@
 
 #import "QSPhotoSelectViewController.h"
 #import "QSPhotoTableViewController.h"
+#import "Utils.h"
+typedef void (^CompletionDownload)(NSArray *images);
 
 @interface QSPhotoSelectViewController ()
 {
@@ -69,27 +71,65 @@
             [assets addObject:result.asset];
         }
         _assetsCallBack(assets,isOrginal);
-    } else if (_imagesCallBack) {
+    } else if (_imagesCallBack && isOrginal) {
         //TODO:返回包含所有选择图片的回调
+        [self getOrginalImagesWithAssets:qs_assets completion:^(NSArray *images) {
+            _imagesCallBack(images);
+        }];
+    } else if (_imagesCallBack) {
+        [self getImagesWithAssets:qs_assets completion:^(NSArray *images) {
+            _imagesCallBack(images);
+        }];
     }
 }
 
 //TODO:同步所有下载完成的图片
-- (NSArray *)getImagesWithAssets:(NSArray<QSPhotoAsset *> *)assets {
+- (void)getOrginalImagesWithAssets:(NSArray<QSPhotoAsset *> *)assets completion:(CompletionDownload)completion {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    for (NSUInteger index = 0; index < assets.count; index++) {
-        QSPhotoAsset *asset = [assets objectAtIndex:index];
         //TODO:下载过程添加遮罩
-        [asset getOriginalWithCallback:^(UIImage *image) {
-            [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",index]];
+    
+    __block NSUInteger imageCount = 0;
+    NSUInteger assetsCount = assets.count;
+    
+    [assets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        [obj getOriginalWithCallback:^(UIImage *image,NSString *assetIdentifier) {
+            
+            [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",idx]];
+            imageCount++;
+            if (imageCount == assetsCount) {
+                NSMutableArray *images = [NSMutableArray array];
+                for (NSUInteger index = 0; index < assets.count; index++) {
+                    NSString *dicIndex = [NSString stringWithFormat:@"%ld",index];
+                    [images addObject:[dic objectForKey:dicIndex]];
+                }
+                completion(images);
+            }
         }];
-    }
-    NSMutableArray *images = [NSMutableArray array];
-    for (NSUInteger index = 0; index < assets.count; index++) {
-        NSString *dicIndex = [NSString stringWithFormat:@"%ld",index];
-        [images addObject:[dic objectForKey:dicIndex]];
-    }
-    return images;
+    }];
+}
+
+- (void)getImagesWithAssets:(NSArray<QSPhotoAsset *> *)assets completion:(CompletionDownload)completion {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    //TODO:下载过程添加遮罩
+    
+    __block NSUInteger imageCount = 0;
+    NSUInteger assetsCount = assets.count;
+    
+    [assets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj getFitThumbnailWithSize:[Utils getLimitSize:CGSizeMake(obj.pixelWidth, obj.pixelHeight)] callback:^(UIImage *image, NSString *assetIdentifier) {
+                [dic setObject:image forKey:[NSString stringWithFormat:@"%ld",idx]];
+                imageCount++;
+            if (imageCount == assetsCount) {
+                NSMutableArray *images = [NSMutableArray array];
+                for (NSUInteger index = 0; index < assets.count; index++) {
+                    NSString *dicIndex = [NSString stringWithFormat:@"%ld",index];
+                    [images addObject:[dic objectForKey:dicIndex]];
+                }
+                completion(images);
+            }
+        }];
+    }];
 }
 
 -(void)dealloc {

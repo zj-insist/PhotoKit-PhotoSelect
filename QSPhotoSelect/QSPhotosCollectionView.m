@@ -66,7 +66,7 @@ static NSString *FooterIdentifier = @"Footer";
     im.needCheckedBtn = self.needRightBtn;
     
     [QSPhotoManage.selectAssets enumerateObjectsUsingBlock:^(QSPhotoAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([[obj getAssetLocalIdentifier] isEqualToString:[im.asset getAssetLocalIdentifier]]) {
+        if ([obj.assetIdentifier isEqualToString:im.asset.assetIdentifier]) {
             im.isSelected = YES;
             *stop = YES;
         }

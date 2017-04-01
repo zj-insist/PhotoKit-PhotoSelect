@@ -39,4 +39,19 @@
 }
 
 
++ (CGSize)getLimitSize:(CGSize)size {
+    CGSize limitSize = CGSizeZero;
+    if (size.width < QSPhotoMaxSize && size.height < QSPhotoMaxSize) {
+        limitSize = size;
+    } else if (size.width >= QSPhotoMaxSize && size.height < size.width) {
+        limitSize.width = QSPhotoMaxSize;
+        limitSize.height = QSPhotoMaxSize / size.width * size.height;
+    } else if (size.width < size.height && size.height >= QSPhotoMaxSize) {
+        limitSize.height = QSPhotoMaxSize;
+        limitSize.width = QSPhotoMaxSize / size.height * size.width;
+    }
+    return limitSize;
+}
+
+
 @end
