@@ -89,6 +89,7 @@
 }
 
 - (void)setupHeaderViewRightBtnWithIndex:(NSUInteger)index {
+    
     self.headerView.isSelected = NO;
     
     QSPhotoAsset *asset = self.assets[self.currentIndex];
@@ -109,9 +110,6 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     QSBrowserCell *cell = [QSBrowserCell cellWithCollectionView:collectionView cellForItemAtIndexPath:indexPath];
     QSPhotoAsset *asset = self.assets[indexPath.item];
-//    [asset getOriginalWithCallback:^(UIImage *image, NSString *assetIdentifier) {
-//        cell.image = image;
-//    }];
     
     [asset getImageWithCallback:^(UIImage *image, NSString *assetIdentifier) {
         cell.image = image;

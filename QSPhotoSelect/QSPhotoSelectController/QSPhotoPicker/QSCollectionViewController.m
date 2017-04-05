@@ -92,6 +92,8 @@
 
 -(void)QS_bottomViewLeftBtnTouched {
     
+    if (!QSPhotoManage.selectAssets.count) return;
+    
     __weak __typeof(self)weakSelf = self;
     QSBrowserViewController *vc = [[QSBrowserViewController alloc] initWithCurrentIndex:0 recordSelectCount:^{
         __strong __typeof(weakSelf)strongSelf = weakSelf;
