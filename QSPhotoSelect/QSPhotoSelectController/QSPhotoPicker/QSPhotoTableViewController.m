@@ -49,6 +49,10 @@
     }  else {
         //允许访问相册
         [self tableView];
+        QSCollectionViewController *vc = [[QSCollectionViewController alloc] initWithQSPhotoGroup:self.allPhotosAlbum];
+        vc.maxCount = self.maxCount;
+        vc.needRightBtn = self.needRightBtn;
+        [self.navigationController pushViewController:vc animated:NO];
     }
 }
 
