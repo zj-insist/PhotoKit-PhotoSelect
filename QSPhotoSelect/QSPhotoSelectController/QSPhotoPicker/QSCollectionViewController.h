@@ -18,6 +18,12 @@ typedef void (^RecordSelectCallBack)(NSMutableArray <QSPhotoAsset *> *selectAsse
 @property(nonatomic, assign) BOOL needRightBtn;
 
 
+/**
+ 根据传入的相册组创建相应的展示视图
+
+ @param group 相册组
+ @return <#return value description#>
+ */
 - (instancetype)initWithQSPhotoGroup:(QSPhotoGroup *)group;
 
 

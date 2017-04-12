@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QSPhotoTableViewController : UITableViewController
+@interface QSPhotoTableViewController : UIViewController
 
 @property(nonatomic, assign) NSUInteger maxCount;
 

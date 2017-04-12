@@ -29,6 +29,13 @@ typedef void (^SelectAssetsCallBack)(NSArray<PHAsset *> *asset, BOOL isOrginal);
  */
 - (instancetype)initWithImagesCallBack:(SelectImagesCallBack)callBack;
 
+
+/**
+ 创建一个返回PHAsset数组的图片选择器
+
+ @param callBack asset数组回调
+ @return <#return value description#>
+ */
 - (instancetype)initWithAssetsCallBack:(SelectAssetsCallBack)callBack;
 
 @end

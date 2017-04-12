@@ -31,5 +31,6 @@ static CGFloat const QSPhotoOrginalMaxSize = 3000.f;
 static CGFloat const ALBUMCELL_HEIGHT = 60.f;
 static CGFloat const ALBUMCELL_SPACE = 10.f;
 
+static NSString *PICKER_PowerBrowserPhotoLibirayText = @"您屏蔽了选择相册的权限，开启请去系统设置->隐私->我的App来打开权限";
 
 #endif /* Constants_h */

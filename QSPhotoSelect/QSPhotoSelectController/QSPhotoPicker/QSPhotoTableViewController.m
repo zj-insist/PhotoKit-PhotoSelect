@@ -21,6 +21,7 @@
 @property(nonatomic, strong) QSPhotoGroup *allPhotosAlbum;
 @property(nonatomic, strong) NSMutableArray<QSPhotoGroup *> *smartAlbums;
 @property(nonatomic, strong) NSMutableArray<QSPhotoAsset *> *selectPhotos;
+@property(nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -29,11 +30,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    
     self.title = @"相册选择";
     [Utils addNavBarCancelButtonWithController:self];
-    [self.tableView registerClass:[QSPhotoSelectAlbumCell class] forCellReuseIdentifier:QSPhotoSelectAlbumCellIdentifier];
     
+    [self setUpAlbumViewController];
+}
+
+- (void)setUpAlbumViewController {
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusDenied) {
+        //用户拒绝访问,提示用户去开启权限
+        UILabel *lockLbl = [[UILabel alloc] init];
+        lockLbl.text = PICKER_PowerBrowserPhotoLibirayText;
+        lockLbl.numberOfLines = 0;
+        lockLbl.textAlignment = NSTextAlignmentCenter;
+        lockLbl.frame = CGRectMake(20, 0, self.view.frame.size.width - 40, self.view.frame.size.height);
+        [self.view addSubview:lockLbl];
+    }  else {
+        //允许访问相册
+        [self tableView];
+    }
 }
 
 - (void) cancelBtnTouched {
@@ -87,6 +103,19 @@
 }
 
 #pragma mark - setter and getter
+
+- (UITableView *)tableView{
+    if (!_tableView) {
+        UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        tableView.delegate = self;
+        tableView.dataSource = self;
+        [tableView registerClass:[QSPhotoSelectAlbumCell class] forCellReuseIdentifier:QSPhotoSelectAlbumCellIdentifier];
+        [self.view addSubview:tableView];
+        _tableView = tableView;
+        _tableView.frame = self.view.bounds;
+    }
+    return _tableView;
+}
 
 -(QSPhotoGroup *)allPhotosAlbum {
     if (!_allPhotosAlbum) {
